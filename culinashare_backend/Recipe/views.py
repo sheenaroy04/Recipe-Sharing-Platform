@@ -14,7 +14,11 @@ class CategoryView(APIView):
         return Response(serializer.data)
     
 class RecipeView(APIView):
-    def get(self,request):
+    def get(self,request,recipe_id=None):
+        if recipe_id is not None:
+            response = Recipe.objects.get(recipe_id=recipe_id)
+            serializer = RecipeSerializer(response)
+            return Response(serializer.data)
         response = Recipe.objects.all()
         serializer = RecipeSerializer(response , many=True)
         return Response(serializer.data)
