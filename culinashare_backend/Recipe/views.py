@@ -9,15 +9,21 @@ from .serializers import CategorySerializer , RecipeSerializer , IngredientSeria
 
 class CategoryView(APIView):
     def get(self,request):
+        
         response = Category.objects.all()
         serializer = CategorySerializer(response , many=True)
         return Response(serializer.data)
     
 class RecipeView(APIView):
-    def get(self,request,recipe_id=None):
+    def get(self,request,recipe_id=None,categories = None):
         if recipe_id is not None:
             response = Recipe.objects.get(recipe_id=recipe_id)
             serializer = RecipeSerializer(response)
+            return Response(serializer.data)
+        
+        elif categories is not None:
+            response = Recipe.objects.filter(categories = categories)
+            serializer = RecipeSerializer(response , many=True)
             return Response(serializer.data)
         response = Recipe.objects.all()
         serializer = RecipeSerializer(response , many=True)

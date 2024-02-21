@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator , MaxValueValidator
+from django.utils.html import mark_safe
 
 # Create your models here.
 
@@ -17,12 +18,16 @@ class Recipe(models.Model):
     cooking_time = models.PositiveIntegerField(help_text = "Cooking time in minutes")
     total_time = models.PositiveIntegerField(help_text = "Total time in minutes")
     servings = models.PositiveIntegerField()
-    date_published = models.DateTimeField(auto_now_add = True)
-    image = models.ImageField(upload_to='recipe-images/')
+    date_published = models.DateField(auto_now_add = True)
+    image = models.ImageField(upload_to='recipe-images')
     categories = models.ManyToManyField(Category , related_name='recipes')
     
     def __str__(self):
         return self.title
+    def img_preview(self):
+        return mark_safe ('<img src= "{url}" width = "300" /> '.format (
+            url=self.image.url
+        ) )
 
 class Ingredient(models.Model):
     recipe = models.ForeignKey(Recipe , on_delete = models.CASCADE , related_name='ingredients')
