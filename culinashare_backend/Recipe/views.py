@@ -22,10 +22,11 @@ class RecipeView(APIView):
             return Response(serializer.data)
         
         elif categories is not None:
-            response = Recipe.objects.filter(categories = categories)
+            response = Recipe.objects.filter(categories = categories).order_by('-recipe_id')
             serializer = RecipeSerializer(response , many=True)
             return Response(serializer.data)
-        response = Recipe.objects.all()
+        
+        response = Recipe.objects.all().order_by('-recipe_id')
         serializer = RecipeSerializer(response , many=True)
         return Response(serializer.data)
     def post(self,request):
