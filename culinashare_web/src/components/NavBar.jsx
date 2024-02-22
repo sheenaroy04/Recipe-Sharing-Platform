@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import Modal from './Modal';
 import logo from '../images/culinashare_logo.png';
+import { UserIcon } from "@heroicons/react/24/outline";
+import {  useSelector } from 'react-redux';
 
 const NavBar = () => {
   const[isModalOpen , setIsModalOpen] = useState(false);
   const[openPage , setOpenPage] = useState('');
+  const user = useSelector(state =>  state.user);
 
   const modalOpen = (openPage) =>{
     setIsModalOpen(true);
@@ -22,13 +25,22 @@ const NavBar = () => {
             <p className='text-orange-600'>Share</p>
             
         </div> */}
-        <img src={logo} className='h-16 w-[10vw]' alt='logo' />
+        <img src={logo} className='h-16 w-[12vw]' alt='logo' />
         <div className='text-white flex items-center justify-center gap-4'>
             
                 {/* <a  href="#home">Home</a>
                 <a  href="#featured">Featured</a> */}
-                <button onClick={()=>modalOpen('signup')} className='border border-orange-600 px-4 py-1 text-lg rounded-md font-semibold'>Register</button>
+                {user ? <>
+                      <p className='font-poppins text-2xl font-semibold text-orange-600'>{user.userName}</p>
+                      <UserIcon className="h-7 w-7 text-white font-bold" />
+                      </>
+                        :
+                        <>
+                        <button onClick={()=>modalOpen('signup')} className='border border-orange-600 px-4 py-1 text-lg rounded-md font-semibold'>Register</button>
                 <button onClick={()=>modalOpen('login')} className='bg-orange-600 px-4 py-1 text-lg rounded-md font-semibold'>Login</button>
+                        </>
+                        }
+                
                             
         </div>
 
