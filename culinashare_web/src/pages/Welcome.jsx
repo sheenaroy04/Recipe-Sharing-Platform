@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import '../index.css'
-import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline";
+import '../index.css';
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
+
+import RecipeSection from '../components/WelcomeComponents/RecipeSection';
 
 const Home = () => {
   const backendUrl = process.env.REACT_APP_BASE_API_URL;
-  const imageAPIUrl = process.env.REACT_APP_IMAGE_URL;
 
   const[recipies , setRecipies] = useState([]);
   const[categories , setCategories] = useState([]);
@@ -42,61 +43,6 @@ const Home = () => {
     setCurrentPage(1);
   }
 
-
-
-  const RecipeCard = () =>{
-    return(
-      <div className='w-[100vw] flex items-center justify-center my-10'>
-          <div className='w-[85%] grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4'>
-            {currentItems.map((recipe , index) =>(
-              <div key={index} className='h-[50vh] bg-white shadow-5xl  rounded-lg drop-shadow-2xl '>
-                {/* <div className='w-full h-10 bg-slate-800 rounded-t-lg text-white flex items-center px-4'>@{recipe.author}</div> */}
-                <div className='h-[50%]  w-full'>
-                  <img src={`${imageAPIUrl}/${recipe.image}`} alt={recipe.title} className='w-full h-full rounded-t-lg' />
-                  <OutlineHeart  className="absolute right-2 top-2 h-6 w-6 text-black pointer" />
-
-                </div>
-                
-                <div className='p-2 text-black flex flex-col  items-stretch'>
-                  <div className='flex w-full items-center justify-between'>
-                    <p className='text-xl font-semibold'>{recipe.title}</p>
-
-                    {categories
-                      .filter(item => item.id === parseInt(recipe.categories))
-                      .map(filteredItem => (
-                        <p className='bg-slate-600/20 rounded-full py-1 px-2 text-xs font-poppins' key={filteredItem.id}>
-                            {filteredItem.name}
-                        </p>
-                        ))
-                    }
-                    
-                  </div>
-                  
-                  <p className='text-l line-clamp-1 '>{recipe.description}</p>
-                  <div className='grid grid-cols-3 my-2 '>
-                    <div className='flex flex-col items-center justify-center border-r border-r-slate-800'>
-                      <p className="font-semibold">Preparation</p>
-                      <p className='text-sm'>{recipe.preparation_time } mins</p>
-                    </div>
-                    <div className='flex flex-col items-center justify-center border-r border-r-slate-800'>
-                      <p className="font-semibold">Cooking</p>
-                      <p className='text-sm'>{recipe.cooking_time } mins</p>
-                    </div>
-                    <div className='flex flex-col items-center justify-center'>
-                      <p className="font-semibold">Total</p>
-                      <p className='text-sm'>{recipe.total_time } mins</p>
-                    </div>
-                  </div>
-                  
-                </div>
-                <div className='w-full h-10 bg-slate-800 absolute rounded-b-lg bottom-0  text-white flex items-center px-4'>@{recipe.author}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-    )
-  }
-
   useEffect(() => {
     categoryList();
   },[])
@@ -126,20 +72,24 @@ const Home = () => {
         <p className='text-center text-6xl my-6  font-culina-share'>Featured Recipes</p>
 
         <div className='flex w-full flex-col items-center justify-center gap-6'>
-          <input className='w-[60%] bg-gray-800/80 px-4 py-2 text-white placeholder-white rounded-full text-lg' type="text" placeholder='Search with name...' />
+          <div className='w-[60%] font-poppins bg-gray-800/80 px-4 py-2 rounded-full flex'>
+            <input className='bg-transparent flex-1 focus:border-none outline-none text-white font-light placeholder-white  text-lg' type="text" placeholder='What do you wanna cook today? ' />
+            <MagnifyingGlassIcon className="h-6 w-6 text-white" />
+          </div>
+          
           <div className='flex flex-row items-center gap-5 w-[60%] text-lg font-semibold'>
-              <button  onClick={()=> handleCategory('')} className={`px-4 py-1  border-2  rounded-full ${activeCategory === '' ? 'bg-gray-800 text-white border-transparent':' border-gray-800'}`} >
+              <button  onClick={()=> handleCategory('')} className={`px-4 py-1 text-lg font-light font-poppins  rounded-full ${activeCategory === '' ? ' text-slate-600  bg-white ':'  backdrop-blur-md shadow-md bg-white/20'}`} >
                 All
               </button>
             {categories.map((category , index) => (
-              <button key={index} onClick={()=> handleCategory(category.id)} className={`px-4 py-1  border-2  rounded-full ${activeCategory === category.id ? 'bg-gray-800 text-white border-transparent':' border-gray-800'}`} >
+              <button key={index} onClick={()=> handleCategory(category.id)} className={`px-4 py-1 text-lg font-light font-poppins   rounded-full ${activeCategory === category.id ? ' text-slate-600  bg-white ':' backdrop-blur-md shadow-md bg-white/20'}`} >
                 {category.name}
               </button>
             ))}
           </div>
         </div>
 
-        <RecipeCard/>
+        <RecipeSection currentItems={currentItems} categories={categories} />
 
         <div className='flex flex-row my-4 items-center justify-center w-full gap-4'>
               {pageNumbers.length>1 && pageNumbers.map((page) =>(
