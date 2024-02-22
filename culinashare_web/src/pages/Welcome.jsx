@@ -4,7 +4,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
 import cooking from '../images/Cooking.gif'
 import RecipeSection from '../components/WelcomeComponents/RecipeSection';
 
-const Home = () => {
+const Welcome = () => {
   const backendUrl = process.env.REACT_APP_BASE_API_URL;
 
   const[recipies , setRecipies] = useState([]);
@@ -108,4 +108,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Welcome

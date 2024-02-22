@@ -5,7 +5,7 @@ const RecipeCard = ({currentItems , categories}) =>{
     const imageAPIUrl = process.env.REACT_APP_IMAGE_URL;
     return(
       <div className='w-[100vw] flex items-center justify-center my-10 '>
-          <div className='w-[70%]  grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4'>
+          <div className='w-[80%]  grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4'>
             {currentItems.map((recipe , index) =>(
               <div key={index} className='h-[50vh] w-full bg-white shadow-5xl  rounded-lg drop-shadow-2xl '>
                 {/* <div className='w-full h-10 bg-slate-800 rounded-t-lg text-white flex items-center px-4'>@{recipe.author}</div> */}

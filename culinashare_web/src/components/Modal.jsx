@@ -7,16 +7,16 @@ const Modal = ({isOpen , onClose , openPage , setOpenPage}) => {
   if (!isOpen) return null
   return (
     <div  className="fixed inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center font-poppins">
-      <div className=' flex items-center justify-center lg:w-[25vw] md:w-[60vw] sm:w-[70vw] w-[95vw]'>
-        <img className='h-full w-[80%]' src={logo} alt=''/>
+      <div className=' flex items-center justify-center'>
+        <img className='h-[15vh] w-[20vw]' src={logo} alt=''/>
       </div>
-    <div className="backdrop-blur-md shadow-md bg-[#F0F8FF]/50 p-5 rounded-lg lg:w-[25vw] md:w-[60vw] sm:w-[70vw] w-[95vw]  min-h-[40vh] flex flex-col justify-between">
+      <div className="backdrop-blur-md shadow-md bg-[#F0F8FF]/50 p-5 rounded-lg lg:w-[30vw] md:w-[60vw] sm:w-[70vw] w-[95vw]  min-h-[50vh] flex flex-col justify-between">
       
       <div className='w-full flex items-center justify-center'>
         
         <div className='flex flex-row  rounded-full w-[70%] my-2'>
-          <button onClick={()=>setOpenPage('login')} className={`px-6 py-2 w-[50%]  rounded-full text-xl ${openPage === 'login' && 'bg-slate-600 text-white'} `}>Login</button>
-          <button onClick={()=>setOpenPage('signup')} className={`px-6 py-2  w-[50%] rounded-full text-xl ${openPage === 'signup' && 'bg-slate-600 text-white'} `}>Register</button>
+          <button onClick={()=>setOpenPage('login')} className={`px-2 py-1 text-center w-[50%]  rounded-full text-xl ${openPage === 'login' && 'bg-slate-600 text-white'} `}>Login</button>
+          <button onClick={()=>setOpenPage('signup')} className={`px-2 py-1 text-center  w-[50%] rounded-full text-xl ${openPage === 'signup' && 'bg-slate-600 text-white'} `}>Register</button>
         </div>
         
         
