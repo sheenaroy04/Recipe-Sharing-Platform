@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Modal from './Modal';
+import logo from '../images/culinashare_logo.png';
 
 const NavBar = () => {
   const[isModalOpen , setIsModalOpen] = useState(false);
@@ -15,11 +16,13 @@ const NavBar = () => {
     setOpenPage('')
   }
   return (
-    <div className='h-14 flex items-center justify-between px-10 fixed top-0 w-[100vw] bg-gradient-to-br from-slate-900/90 to-slate-700/90 z-20'>
-        <div className='text-white text-4xl font-bold font-dancing-script flex flex-row'>
+    <div className='h-16 flex items-center justify-between px-10 fixed top-0 w-[100vw] bg-gradient-to-br from-slate-900/90 to-slate-700/90 z-20'>
+        {/* <div className='text-white text-4xl font-bold font-dancing-script flex flex-row'>
             <p>Culina</p>
             <p className='text-orange-600'>Share</p>
-        </div>
+            
+        </div> */}
+        <img src={logo} className='h-16 w-[10vw]' alt='logo' />
         <div className='text-white flex items-center justify-center gap-4'>
             
                 {/* <a  href="#home">Home</a>

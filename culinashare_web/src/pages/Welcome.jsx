@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../index.css';
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
-
+import cooking from '../images/Cooking.gif'
 import RecipeSection from '../components/WelcomeComponents/RecipeSection';
 
 const Home = () => {
@@ -68,12 +68,16 @@ const Home = () => {
           
         </div>
 
-        <div id='featured' className='flex flex-col items-center w-[100vw] py-4 bg-gradient-to-r from-orange-700 to-orange-500 text-white'>
-        <p className='text-center text-6xl my-6  font-culina-share'>Featured Recipes</p>
+        <div id='featured' className='flex flex-col items-center w-[100vw] bg-gradient-to-r from-orange-700 to-orange-500 text-white'>
+        <div className='w-full flex flex-col items-center justify-center mb-4'>
+            <img className='h-[20vh] w-[10vw]' src={cooking} alt="" />
+            <p className='text-6xl   font-culina-share'>Featured Recipes</p>
+        </div>
+        
 
         <div className='flex w-full flex-col items-center justify-center gap-6'>
-          <div className='w-[60%] font-poppins bg-gray-800/80 px-4 py-2 rounded-full flex'>
-            <input className='bg-transparent flex-1 focus:border-none outline-none text-white font-light placeholder-white  text-lg' type="text" placeholder='What do you wanna cook today? ' />
+          <div className='w-[60%] font-poppins bg-white/30 px-4 py-2 rounded-full flex backdrop-blur-md shadow-md'>
+            <input className='bg-transparent flex-1 focus:border-none outline-none text-white font-light placeholder-white  placeholder:text-sm  placeholder:italic  text-lg ' type="text" placeholder='What do you wanna cook today? ' />
             <MagnifyingGlassIcon className="h-6 w-6 text-white" />
           </div>
           

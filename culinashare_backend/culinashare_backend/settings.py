@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     "corsheaders",
     'rest_framework',
     'AppUsers',
-    'Recipe'
+    'Recipe',
+    'rest_framework_simplejwt'
 ]
 
 MIDDLEWARE = [
@@ -74,6 +75,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'culinashare_backend.wsgi.application'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
 
 
 # Database
