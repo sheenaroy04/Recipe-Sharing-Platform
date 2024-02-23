@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline";
+import { Link } from 'react-router-dom';
 
-const RecipeCard = ({currentItems , categories}) =>{
+const RecipeCard = ({currentItems , categories , users}) =>{
+  
+
+  
+
     const imageAPIUrl = process.env.REACT_APP_IMAGE_URL;
     return(
       <div className='w-[100vw] flex items-center justify-center my-10 '>
-          <div className='w-[80%]  grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4'>
+          <div className='w-[70%]  grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4'>
             {currentItems.map((recipe , index) =>(
-              <div key={index} className='h-[50vh] w-full bg-white shadow-5xl  rounded-lg drop-shadow-2xl '>
+              <Link key={index} to={`recipe/${recipe.recipe_id}`}>
+              <div key={index} className='h-[30vh] w-full bg-white/60 backdrop-blur-md shadow-md   rounded-lg drop-shadow-2xl '>
                 {/* <div className='w-full h-10 bg-slate-800 rounded-t-lg text-white flex items-center px-4'>@{recipe.author}</div> */}
                 <div className='h-[50%]  w-full overflow-hidden relative'>
                   <img src={`${imageAPIUrl}/${recipe.image}`} alt={recipe.title} className='cursor-pointer w-full h-full rounded-t-lg transition-transform ease-in-out  duration-300 hover:scale-110' />
@@ -22,7 +28,7 @@ const RecipeCard = ({currentItems , categories}) =>{
                     {categories
                       .filter(item => item.id === parseInt(recipe.categories))
                       .map(filteredItem => (
-                        <p className='bg-slate-600/20 rounded-full py-1 px-2 text-xs font-poppins' key={filteredItem.id}>
+                        <p className={`${recipe.is_vegetarian ? 'bg-green-500' : 'bg-red-500'} text-white rounded-full py-1 px-2 text-xs font-poppins `} key={filteredItem.id}>
                             {filteredItem.name}
                         </p>
                         ))
@@ -31,7 +37,7 @@ const RecipeCard = ({currentItems , categories}) =>{
                   </div>
                   
                   <p className='text-l line-clamp-1 '>{recipe.description}</p>
-                  <div className='grid grid-cols-3 my-2 '>
+                  {/* <div className='grid grid-cols-3 my-2 '>
                     <div className='flex flex-col items-center justify-center border-r border-r-slate-800'>
                       <p className="font-semibold">Preparation</p>
                       <p className='text-sm'>{recipe.preparation_time } mins</p>
@@ -44,12 +50,23 @@ const RecipeCard = ({currentItems , categories}) =>{
                       <p className="font-semibold">Total</p>
                       <p className='text-sm'>{recipe.total_time } mins</p>
                     </div>
-                  </div>
+                  </div> */}
                   
                 </div>
-                <div className='w-full h-10 bg-slate-800 absolute rounded-b-lg bottom-0  text-white flex items-center px-4'>@{recipe.author}</div>
+                <div className='w-full h-10 bg-slate-800 absolute rounded-b-lg bottom-0  text-white flex items-center px-4'>
+                {
+              users.filter((user) => user.id === recipe.author).map((userData) => (
+                      <p className='font-poppins font-regular  text-sm' key={userData.id}>
+                  @{userData.username}
+                  </p>
+                  ))
+                }
+
+                </div>
               </div>
+              </Link>
             ))}
+            
           </div>
         </div>
     )

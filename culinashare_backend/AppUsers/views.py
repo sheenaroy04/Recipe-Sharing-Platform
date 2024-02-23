@@ -48,6 +48,14 @@ class LoginView(APIView):
                 },status = status.HTTP_200_OK)
 
 class RegisterView(APIView):
+    def get(self,request , id=None):
+        if id is not None:
+            individual = User.objects.get(id=id)
+            serializer = UserSerializer(individual)
+            return Response(serializer.data)
+        users = User.objects.all()
+        serializer = UserSerializer(users , many=True)
+        return Response(serializer.data)
     
     def post(self,request):
         serializer = UserSerializer(data=request.data)

@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator , MaxValueValidator
 from django.utils.html import mark_safe
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -9,11 +10,14 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+
+    
 class Recipe(models.Model):
     recipe_id = models.AutoField(primary_key = True)
     title = models.CharField(max_length = 100)
-    author = models.CharField(max_length = 40)
+    author = models.ForeignKey(User , on_delete = models.CASCADE)
     description = models.TextField()
+    is_vegetarian = models.BooleanField(default=False , help_text='Check if the recipe is vegetarian')
     preparation_time = models.PositiveIntegerField(help_text = "Preparation in minutes")
     cooking_time = models.PositiveIntegerField(help_text = "Cooking time in minutes")
     total_time = models.PositiveIntegerField(help_text = "Total time in minutes")

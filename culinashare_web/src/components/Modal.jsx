@@ -6,7 +6,7 @@ import logo from '../images/culinashare_logo.png';
 const Modal = ({isOpen , onClose , openPage , setOpenPage}) => {
   if (!isOpen) return null
   return (
-    <div  className="fixed inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center font-poppins">
+    <div  className="fixed inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center font-poppins z-30">
       <div className=' flex items-center justify-center'>
         <img className='h-[15vh] w-[20vw]' src={logo} alt=''/>
       </div>

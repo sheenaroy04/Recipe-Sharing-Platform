@@ -14,7 +14,7 @@ function App() {
         <Route path='/' element={<Welcome/>}/>
         
         <Route element={<RecipeViewRoute/>}>
-          <Route  path='/recipe' element={<RecipeView/>}/>
+          <Route  path='/recipe/:recipeId' element={<RecipeView/>}/>
         </Route>
         
         <Route path='*' element={<NotFound/>} />

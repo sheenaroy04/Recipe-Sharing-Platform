@@ -3,12 +3,18 @@ import '../index.css';
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
 import cooking from '../images/Cooking.gif'
 import RecipeSection from '../components/WelcomeComponents/RecipeSection';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import Modal from '../components/Modal';
 
 const Welcome = () => {
   const backendUrl = process.env.REACT_APP_BASE_API_URL;
+  const user = useSelector(state => state.user);
+  const navigate = useNavigate();
 
   const[recipies , setRecipies] = useState([]);
   const[categories , setCategories] = useState([]);
+  const [users , setUsers] = useState([]);
   const[activeCategory , setActiveCategory] = useState('');
 
   const[currentPage , setCurrentPage] = useState(1);
@@ -16,6 +22,9 @@ const Welcome = () => {
   const indexOfLastCard = currentPage * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
   const currentItems = recipies.slice(indexOfFirstCard,indexOfLastCard);
+
+  const[isModalOpen , setIsModalOpen] = useState(false);
+  const[openPage , setOpenPage] = useState('');
 
 
   const pageNumbers = []
@@ -37,10 +46,37 @@ const Welcome = () => {
     setCategories(fetchCategoriesResponse);
     console.log(fetchCategoriesResponse)
   }
+  const getUsers = async(id) =>{
+    const response = await fetch(`http://127.0.0.1:8000/api/v1/customers/users/register/`);
+    const responseData = await response.json();
+    console.log(responseData);
+    setUsers(responseData)
+  }
+  
   
   const handleCategory = (index) =>{
     setActiveCategory(index);
     setCurrentPage(1);
+  }
+
+  const newRecipeShareNavigation =() =>{
+    if(user){
+      navigate('/recipe');
+    }
+    else{
+      setIsModalOpen(true);
+      setOpenPage('login')
+    }
+  }
+
+  const modalOpen = (openPage) =>{
+    setIsModalOpen(true);
+    setOpenPage(openPage);
+  }
+
+  const modalClose = () =>{
+    setIsModalOpen(false);
+    setOpenPage('')
   }
 
   useEffect(() => {
@@ -49,10 +85,14 @@ const Welcome = () => {
   useEffect(() =>{
     recipeList();
   },[activeCategory])
+  useEffect(() => {
+    getUsers();
+  },[])
     
 
   return (
     <div>
+      <Modal isOpen={isModalOpen} openPage={openPage} setOpenPage={setOpenPage} onClose={modalClose}  />
         <div className='welcome flex flex-col items-center justify-center'>
           <div className='bg-slate-800/60 py-12  w-full flex items-center justify-center flex-col gap-6 text-white'>
             <div className='text-7xl text-center font-bold'>
@@ -60,9 +100,12 @@ const Welcome = () => {
               <p >In every dish, a journey discovered.</p> 
             </div>
             
-            <button className='px-6 font-poppins py-2 bg-orange-500 transition duration-200 hover:bg-orange-700 rounded-sm hover:scale-105 text-xl text-[#F0F8FF]  shadow-md shadow-black'>
-              Begin Your Culinary Journey
+            
+            <button onClick={newRecipeShareNavigation} className='px-6 font-poppins py-2 bg-orange-500 transition duration-200 hover:bg-orange-700 rounded-sm hover:scale-105 text-xl text-[#F0F8FF]  shadow-md shadow-black'>
+               Begin Your Culinary Journey
             </button>
+            
+            
             
           </div>
           
@@ -93,7 +136,7 @@ const Welcome = () => {
           </div>
         </div>
 
-        <RecipeSection currentItems={currentItems} categories={categories} />
+        <RecipeSection currentItems={currentItems} categories={categories} users={users} />
 
         <div className='flex flex-row my-4 items-center justify-center w-full gap-4'>
               {pageNumbers.length>1 && pageNumbers.map((page) =>(
