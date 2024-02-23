@@ -17,6 +17,7 @@ class Recipe(models.Model):
     title = models.CharField(max_length = 100)
     author = models.ForeignKey(User , on_delete = models.CASCADE)
     description = models.TextField()
+    procedure = models.TextField()
     is_vegetarian = models.BooleanField(default=False , help_text='Check if the recipe is vegetarian')
     preparation_time = models.PositiveIntegerField(help_text = "Preparation in minutes")
     cooking_time = models.PositiveIntegerField(help_text = "Cooking time in minutes")
@@ -43,7 +44,7 @@ class Ingredient(models.Model):
 
 class Rating(models.Model):
     recipe = models.ForeignKey(Recipe , on_delete = models.CASCADE , related_name = 'Rating')
-    user = models.CharField(max_length = 200)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.IntegerField(
         validators=[
             MinValueValidator(1),
