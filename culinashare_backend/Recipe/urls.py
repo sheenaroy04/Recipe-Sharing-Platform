@@ -10,7 +10,8 @@ urlpatterns = [
     
     path('ingredients/recipe=<int:recipe>' ,IngredientView.as_view() , name='Ingredients' ),
     
-    path('ratings/' , RatingView.as_view() , name='Rating' )
+    path('ratings/' , RatingView.as_view() , name='Rating' ),
+    path('ratings/<int:recipe>' , RatingView.as_view() , name='Recipe Rating' )
 ] 
 
 

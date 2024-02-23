@@ -8,6 +8,8 @@ const RecipeView = () => {
   const[ingredients , setIngredients] = useState([]);
   const[procedure , setProcedure] = useState([])
 
+  
+
   const fetchRecipe = async() =>{
     const response = await fetch(`${backendUrl}/food/recipies/recipe=${recipeId}`);
     const responseData = await response.json();
@@ -34,7 +36,7 @@ const RecipeView = () => {
       {/* <div className='bg-white/80 h-full  backdrop-blur-md shadow-md rounded-lg p-8  w-full'>
 
       </div> */}
-      <div className='bg-white/80 h-full  backdrop-blur-md shadow-md rounded-lg p-8  '>
+      <div className='bg-white/80 h-full w-full  backdrop-blur-md shadow-md rounded-lg p-8  '>
 
         <p className='text-4xl font-bold text-orange-600 my-2'>{recipe.title}</p>
         <p>{recipe.description}</p>

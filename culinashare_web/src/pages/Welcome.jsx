@@ -95,7 +95,7 @@ const Welcome = () => {
       <Modal isOpen={isModalOpen} openPage={openPage} setOpenPage={setOpenPage} onClose={modalClose}  />
         <div className='welcome flex flex-col items-center justify-center'>
           <div className='bg-slate-800/60 py-12  w-full flex items-center justify-center flex-col gap-6 text-white'>
-            <div className='text-7xl text-center font-bold'>
+            <div className='text-2xl sm:text-4xl md:text-5xl lg:text-7xl text-center font-bold'>
               <p className='text-orange-600'>Where every bite unfolds a story.</p>
               <p >In every dish, a journey discovered.</p> 
             </div>
@@ -113,23 +113,23 @@ const Welcome = () => {
 
         <div id='featured' className='flex flex-col items-center w-[100vw] bg-gradient-to-r from-orange-700 to-orange-500 text-white'>
         <div className='w-full flex flex-col items-center justify-center mb-4'>
-            <img className='h-[20vh] w-[10vw]' src={cooking} alt="" />
+            <img className='h-[20vh] w-[30vw] md:h-[25vh] md:w-[15vw]' src={cooking} alt="" />
             <p className='text-6xl   font-culina-share'>Featured Recipes</p>
         </div>
         
 
         <div className='flex w-full flex-col items-center justify-center gap-6'>
-          <div className='w-[60%] font-poppins bg-white/30 px-4 py-2 rounded-full flex backdrop-blur-md shadow-md'>
+          <div className='w-[85%] md:w-[60%] font-poppins bg-white/30 px-4 py-2 rounded-full flex backdrop-blur-md shadow-md'>
             <input className='bg-transparent flex-1 focus:border-none outline-none text-white font-light placeholder-white  placeholder:text-sm  placeholder:italic  text-lg ' type="text" placeholder='What do you wanna cook today? ' />
             <MagnifyingGlassIcon className="h-6 w-6 text-white" />
           </div>
           
-          <div className='flex flex-row items-center gap-5 w-[60%] text-lg font-semibold'>
-              <button  onClick={()=> handleCategory('')} className={`px-4 py-1 text-lg font-light font-poppins  rounded-full ${activeCategory === '' ? ' text-slate-600  bg-white ':'  backdrop-blur-md shadow-md bg-white/20'}`} >
+          <div className='flex flex-row items-center  flex-wrap gap-1 lg:gap-4 w-[80%] lg:w-[60%] text-lg font-semibold'>
+              <button  onClick={()=> handleCategory('')} className={`px-4 py-1 text-sm md:text-md lg:text-xl font-light font-poppins  rounded-full ${activeCategory === '' ? ' text-slate-600  bg-white ':'  backdrop-blur-md shadow-md bg-white/20'}`} >
                 All
               </button>
             {categories.map((category , index) => (
-              <button key={index} onClick={()=> handleCategory(category.id)} className={`px-4 py-1 text-lg font-light font-poppins   rounded-full ${activeCategory === category.id ? ' text-slate-600  bg-white ':' backdrop-blur-md shadow-md bg-white/20'}`} >
+              <button key={index} onClick={()=> handleCategory(category.id)} className={`px-4 py-1 text-sm md:text-md lg:text-xl font-light font-poppins   rounded-full ${activeCategory === category.id ? ' text-slate-600  bg-white ':' backdrop-blur-md shadow-md bg-white/20'}`} >
                 {category.name}
               </button>
             ))}

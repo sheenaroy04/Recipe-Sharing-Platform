@@ -4,9 +4,9 @@ import logo from '../images/culinashare_logo.png';
 const Footer = () => {
   return (
     <div className='bg-gradient-to-br font-poppins from-slate-900 to-slate-700 text-white flex flex-row  justify-center w-[100vw] min-h-[40vh] p-6'>
-      <div className='w-[80%] h-full grid grid-cols-2 gap-4'>
-        <div className='p-6 flex flex-col gap-4'>
-          <img src={logo} alt="" className='h-[80%] w-[60%]' />
+      <div className='w-[80%] h-full grid grid-cols-1 md:grid-cols-2 gap-4'>
+        <div className='flex flex-col lg:p-6 lg:gap-4 items-center justify-center gap-1'>
+          <img src={logo} alt="" className='h-full w-full lg:h-[70%] lg:w-[80%]' />
         </div>
         <div className='p-6 flex flex-col gap-4'>
           <p className='text-2xl font-semibold text-orange-600'>Credits</p>

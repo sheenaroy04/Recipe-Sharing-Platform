@@ -9,7 +9,8 @@ class CategorySerializer(serializers.ModelSerializer):
         
 class RecipeSerializer(serializers.ModelSerializer):
     
-    # categories = serializers.PrimaryKeyRelated(queryset = Category.objects.all() , many=True)
+    average_score =serializers.FloatField(read_only=True)
+    number_of_ratings = serializers.IntegerField(read_only=True)
     
     class Meta:
         model = Recipe
