@@ -12,8 +12,8 @@ const RecipeCard = ({currentItems , categories , users}) =>{
       <div className='w-[100vw] flex items-center justify-center my-10 '>
           <div className='w-[70%]  grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4'>
             {currentItems.map((recipe , index) =>(
-              <Link key={index} to={`recipe/${recipe.recipe_id}`}>
-              <div key={index} className='h-[30vh] w-full bg-white/60 backdrop-blur-md shadow-md   rounded-lg drop-shadow-2xl '>
+              
+              <div key={index} className='min-h-[30vh] w-full bg-white/60 backdrop-blur-md shadow-md   rounded-lg drop-shadow-2xl '>
                 {/* <div className='w-full h-10 bg-slate-800 rounded-t-lg text-white flex items-center px-4'>@{recipe.author}</div> */}
                 <div className='h-[50%]  w-full overflow-hidden relative'>
                   <img src={`${imageAPIUrl}/${recipe.image}`} alt={recipe.title} className='cursor-pointer w-full h-full rounded-t-lg transition-transform ease-in-out  duration-300 hover:scale-110' />
@@ -36,7 +36,11 @@ const RecipeCard = ({currentItems , categories , users}) =>{
                     
                   </div>
                   
-                  <p className='text-l line-clamp-1 '>{recipe.description}</p>
+                  <p className='text-l line-clamp-3 leading-tight my-2'>{recipe.description}</p>
+
+                  <Link key={index} className='' to={`recipe/${recipe.recipe_id}`}>
+                    <button  className='border w-full border-orange-600 px-2 py-1 text-lg rounded-md hover:bg-orange-600 hover:text-white'>View Recipe</button>
+                  </Link>
                   {/* <div className='grid grid-cols-3 my-2 '>
                     <div className='flex flex-col items-center justify-center border-r border-r-slate-800'>
                       <p className="font-semibold">Preparation</p>
@@ -53,7 +57,7 @@ const RecipeCard = ({currentItems , categories , users}) =>{
                   </div> */}
                   
                 </div>
-                <div className='w-full h-10 bg-slate-800 absolute rounded-b-lg bottom-0  text-white flex items-center px-4'>
+                <div className='w-full h-10 bg-slate-800 absolute rounded-b-lg bottom-0  text-white flex items-center justify-between px-4'>
                 {
               users.filter((user) => user.id === recipe.author).map((userData) => (
                       <p className='font-poppins font-regular  text-sm' key={userData.id}>
@@ -61,10 +65,11 @@ const RecipeCard = ({currentItems , categories , users}) =>{
                   </p>
                   ))
                 }
+                
 
                 </div>
               </div>
-              </Link>
+              
             ))}
             
           </div>

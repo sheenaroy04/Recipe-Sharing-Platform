@@ -37,8 +37,8 @@ class RecipeView(APIView):
         return Response({'message' : 'Error'})
 
 class IngredientView(APIView):
-    def get(self,request):
-        response = Ingredient.objects.all()
+    def get(self,request,recipe):
+        response = Ingredient.objects.filter(recipe=recipe)
         serializer = IngredientSerializer(response , many=True)
         return Response(serializer.data)
 

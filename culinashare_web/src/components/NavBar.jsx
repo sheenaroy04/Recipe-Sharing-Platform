@@ -31,7 +31,7 @@ const NavBar = () => {
                 {/* <a  href="#home">Home</a>
                 <a  href="#featured">Featured</a> */}
                 {user ? <>
-                      <p className='font-poppins text-2xl font-semibold text-orange-600'>{user.userName}</p>
+                      <p className='font-poppins text-xl font-semibold text-orange-600'>{user.userName}</p>
                       <UserIcon className="h-7 w-7 text-white font-bold" />
                       </>
                         :
