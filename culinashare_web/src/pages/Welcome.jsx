@@ -18,7 +18,7 @@ const Welcome = () => {
   const[activeCategory , setActiveCategory] = useState('');
 
   const[currentPage , setCurrentPage] = useState(1);
-  const[cardsPerPage] = useState(8);
+  const[cardsPerPage , setCardsPerPage] = useState(8);
   const indexOfLastCard = currentPage * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
   const currentItems = recipies.slice(indexOfFirstCard,indexOfLastCard);
@@ -44,12 +44,12 @@ const Welcome = () => {
     const fetchCategories = await fetch(`${backendUrl}/food/categories/`);
     const fetchCategoriesResponse = await fetchCategories.json();
     setCategories(fetchCategoriesResponse);
-    console.log(fetchCategoriesResponse)
+    // console.log(fetchCategoriesResponse)
   }
   const getUsers = async(id) =>{
     const response = await fetch(`http://127.0.0.1:8000/api/v1/customers/users/register/`);
     const responseData = await response.json();
-    console.log(responseData);
+    // console.log(responseData);
     setUsers(responseData)
   }
   
@@ -61,7 +61,7 @@ const Welcome = () => {
 
   const newRecipeShareNavigation =() =>{
     if(user){
-      navigate('/recipe');
+      navigate('/post-recipe');
     }
     else{
       setIsModalOpen(true);
@@ -88,6 +88,24 @@ const Welcome = () => {
   useEffect(() => {
     getUsers();
   },[])
+
+  useEffect(()=>{
+    const  handleWidthResize = () => {
+      if(window.innerWidth < 768){
+        setCardsPerPage(4)
+      }
+      else if(window.innerWidth >= 768 && window.innerWidth < 1024){
+        setCardsPerPage(6)
+      }
+      else if(window.innerWidth >= 1024){
+        setCardsPerPage(8)
+      }
+    }
+    
+    window.addEventListener('resize' , handleWidthResize);
+    handleWidthResize();
+    return () => window.removeEventListener('resize',handleWidthResize)
+  })
     
 
   return (
@@ -95,7 +113,7 @@ const Welcome = () => {
       <Modal isOpen={isModalOpen} openPage={openPage} setOpenPage={setOpenPage} onClose={modalClose}  />
         <div className='welcome flex flex-col items-center justify-center'>
           <div className='bg-slate-800/60 py-12  w-full flex items-center justify-center flex-col gap-6 text-white'>
-            <div className='text-2xl sm:text-4xl md:text-5xl lg:text-7xl text-center font-bold'>
+            <div className='text-2xl sm:text-4xl md:text-5xl lg:text-7xl text-center font-bold '>
               <p className='text-orange-600'>Where every bite unfolds a story.</p>
               <p >In every dish, a journey discovered.</p> 
             </div>

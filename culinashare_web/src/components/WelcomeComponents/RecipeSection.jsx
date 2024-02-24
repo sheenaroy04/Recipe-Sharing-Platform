@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React,{useState , useEffect , useRef} from 'react'
 import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline";
 import { Link } from 'react-router-dom';
 import { ClockIcon  ,ShareIcon} from "@heroicons/react/24/outline";
 import { ArrowRightCircleIcon } from "@heroicons/react/20/solid";
 import { StarIcon } from "@heroicons/react/20/solid";
+import { useSelector } from 'react-redux';
 
 const RecipeCard = ({currentItems , categories , users}) =>{
   
-
   
 
     const imageAPIUrl = process.env.REACT_APP_IMAGE_URL;
@@ -16,7 +16,7 @@ const RecipeCard = ({currentItems , categories , users}) =>{
           <div className='w-[80%]  grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4'>
             {currentItems.map((recipe , index) =>(
 
-              <div key={index} className='h-[45h] bg-black/30 backdrop-blur-md shadow-md   rounded-lg drop-shadow-2xl flex flex-col cursor-pointer'>
+              <div  key={index} className='h-[45h] bg-black/30 backdrop-blur-md shadow-md   rounded-lg drop-shadow-2xl flex flex-col cursor-pointer'>
                 <div className='w-full h-2/4 flex'>
                   <img src={`${imageAPIUrl}/${recipe.image}`} alt="" className='w-full h-full rounded-lg' />
                 </div>

@@ -41,7 +41,7 @@ const RecipeView = () => {
         <p className='text-4xl font-bold text-orange-600 my-2'>{recipe.title}</p>
         <p>{recipe.description}</p>
         <p className='text-4xl font-bold text-orange-600 my-2'>Procedure</p>
-       
+        
         <ol className='ml-4'>
         {procedure.map((step,index)=>(
           <li key={index} className='list-decimal my-1'> {step} </li>

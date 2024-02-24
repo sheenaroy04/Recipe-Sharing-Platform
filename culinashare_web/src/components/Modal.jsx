@@ -8,7 +8,7 @@ const Modal = ({isOpen , onClose , openPage , setOpenPage}) => {
   return (
     <div  className="fixed inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center font-poppins z-30">
       <div className=' flex items-center justify-center'>
-        <img className='h-[15vh] w-[20vw]' src={logo} alt=''/>
+        <img className='h-[15vh] w-[60vw] sm:[20vw] md:w-[20vw]' src={logo} alt=''/>
       </div>
       <div className="backdrop-blur-md shadow-md bg-[#F0F8FF]/50 p-5 rounded-lg lg:w-[30vw] md:w-[60vw] sm:w-[70vw] w-[95vw]  min-h-[60vh] flex flex-col justify-between">
       

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Modal from '../components/Modal';
 import { useNavigate } from 'react-router-dom';
 
-const RecipeViewRoute = () => {
+const RecipePostRoute = () => {
   const user = useSelector(state => state.user);
   const navigation = useNavigate()
 
@@ -17,4 +17,4 @@ const RecipeViewRoute = () => {
 
 }
 
-export default RecipeViewRoute
+export default RecipePostRoute
