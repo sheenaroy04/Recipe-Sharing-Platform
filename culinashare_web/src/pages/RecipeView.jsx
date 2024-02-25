@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+import Procedure from '../components/RecipeViewComponent/Procedure';
+
 const RecipeView = () => {
   const {recipeId} = useParams();
   const backendUrl = process.env.REACT_APP_BASE_API_URL;
   const [recipe , setRecipe] = useState({});
   const[ingredients , setIngredients] = useState([]);
   const[procedure , setProcedure] = useState([])
-
+  const[comments,setComments] = useState([]);
   
 
   const fetchRecipe = async() =>{
@@ -25,28 +27,25 @@ const RecipeView = () => {
   
   }
 
+  const fetchComments = async() =>{
+    const response = await fetch(`${backendUrl}/food/ratings/${recipeId}`);
+    const responseData = await response.json();
+    setComments(responseData.data);
+  }
+
   useEffect(() =>{
     fetchRecipe();
     fetchIngredients();
+    fetchComments();
   },[])
 
 
   return (
+    <>
     <div className='mt-16 p-8 min-h-[70vh] grid w-[100vw] lg:grid-cols-[70%_25%] grid-cols-1 bg-[#F0F8FF]  place-items-center gap-8'>
-      {/* <div className='bg-white/80 h-full  backdrop-blur-md shadow-md rounded-lg p-8  w-full'>
-
-      </div> */}
+      
       <div className='bg-white/80 h-full w-full  backdrop-blur-md shadow-md rounded-lg p-8  '>
-
-        <p className='text-4xl font-bold text-orange-600 my-2'>{recipe.title}</p>
-        <p>{recipe.description}</p>
-        <p className='text-4xl font-bold text-orange-600 my-2'>Procedure</p>
-        
-        <ol className='ml-4'>
-        {procedure.map((step,index)=>(
-          <li key={index} className='list-decimal my-1'> {step} </li>
-        ))}
-        </ol>
+        <Procedure recipe={recipe} procedure={procedure} />
       </div>
       <div className='bg-white/80 h-full  backdrop-blur-md shadow-md rounded-lg p-8 w-full'>
       <p className='text-4xl font-bold text-orange-600'>Ingredients</p>
@@ -68,6 +67,23 @@ const RecipeView = () => {
         </table>
       </div>
     </div>
+    
+    <div className='flex items-center justify-center w-[100vw] my-4'>
+      <div className='bg-white/80 h-full  backdrop-blur-md shadow-md rounded-lg p-8 w-[90%]'>
+        <p className='text-4xl font-bold text-orange-600'>Comments</p>
+        {comments.map((comment , index) =>(
+          <div key={index} className='my-2 flex flex-col border-b gap-2'>
+            <p className='text-slate-600 text-sm'>@{comment.username}</p>
+            <p className='text-l font-poppins'>{comment.comments}</p>
+          </div>
+          
+        ))}
+        
+      </div>
+    </div>
+    
+
+    </>
   )
 }
 

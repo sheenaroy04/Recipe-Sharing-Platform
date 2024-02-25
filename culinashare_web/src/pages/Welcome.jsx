@@ -47,7 +47,7 @@ const Welcome = () => {
     // console.log(fetchCategoriesResponse)
   }
   const getUsers = async(id) =>{
-    const response = await fetch(`http://127.0.0.1:8000/api/v1/customers/users/register/`);
+    const response = await fetch(`${backendUrl}/customers/users/register/`);
     const responseData = await response.json();
     // console.log(responseData);
     setUsers(responseData)
@@ -111,6 +111,7 @@ const Welcome = () => {
   return (
     <div>
       <Modal isOpen={isModalOpen} openPage={openPage} setOpenPage={setOpenPage} onClose={modalClose}  />
+      
         <div className='welcome flex flex-col items-center justify-center'>
           <div className='bg-slate-800/60 py-12  w-full flex items-center justify-center flex-col gap-6 text-white'>
             <div className='text-2xl sm:text-4xl md:text-5xl lg:text-7xl text-center font-bold '>

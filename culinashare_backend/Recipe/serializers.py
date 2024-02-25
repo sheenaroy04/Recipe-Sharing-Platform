@@ -29,6 +29,8 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class RatingSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(max_length=50 , read_only=True)
+    
     class Meta:
         model = Rating
         fields = '__all__'
