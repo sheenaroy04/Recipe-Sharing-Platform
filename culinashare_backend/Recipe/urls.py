@@ -6,7 +6,12 @@ urlpatterns = [
     
     path('recipies/' ,RecipeView.as_view() , name="Recipies" ),
     path('recipies/recipe=<int:recipe_id>/' ,RecipeView.as_view() , name="Recipie" ),
-    path('recipies/<int:categories>' , RecipeView.as_view() , name = "Recipe By Category"),
+    path('recipies/category=<int:categories>' , RecipeView.as_view() , name = "Recipe By Category"),
+    path('recipies/vegetarian' , RecipeView.as_view() ,{'is_vegetarian' : True}, name="Recipe By Vegetarian"),
+    path('recipies/non-vegetarian' , RecipeView.as_view() ,{'is_vegetarian' : False}, name="Recipe By Non Vegetarian"),
+    
+    path('recipies/<int:categories>/vegetarian' , RecipeView.as_view() ,{'is_vegetarian' : True}, name="Recipe By Category - Vegetarian"),
+    path('recipies/<int:categories>/non-vegetarian' , RecipeView.as_view() ,{'is_vegetarian' : False}, name="Recipe By Category - Non Vegetarian"),
     
     path('ingredients/recipe=<int:recipe>' ,IngredientView.as_view() , name='Ingredients' ),
     

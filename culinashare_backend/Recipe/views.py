@@ -16,7 +16,7 @@ class CategoryView(APIView):
         return Response(serializer.data)
     
 class RecipeView(APIView):
-    def get(self,request,recipe_id=None,categories = None):
+    def get(self,request,recipe_id=None,categories = None , is_vegetarian=None):
         if recipe_id is not None:
             recipes = Recipe.objects.annotate(
                         average_score = Avg('Rating__score') or 0,
@@ -27,12 +27,32 @@ class RecipeView(APIView):
             serializer = RecipeSerializer(recipes)
             return Response(serializer.data)
         
+        if categories is not None and is_vegetarian is not None:
+            recipes = Recipe.objects.annotate(
+                        average_score = Avg('Rating__score') or 0,
+                        number_of_ratings = Count('Rating')
+                        ).order_by('-average_score').filter(categories = categories , is_vegetarian = is_vegetarian)
+            for recipe in recipes:
+                recipe.average_score = round(recipe.average_score, 1) if recipe.average_score else None
+            serializer = RecipeSerializer(recipes , many=True)
+            return Response(serializer.data)
+        
         elif categories is not None:
             
             recipes = Recipe.objects.annotate(
                         average_score = Avg('Rating__score') or 0,
                         number_of_ratings = Count('Rating')
                         ).order_by('-average_score').filter(categories = categories).order_by('-recipe_id')
+            for recipe in recipes:
+                recipe.average_score = round(recipe.average_score, 1) if recipe.average_score else None
+            serializer = RecipeSerializer(recipes , many=True)
+            return Response(serializer.data)
+        
+        elif is_vegetarian is not None:
+            recipes = Recipe.objects.annotate(
+                        average_score = Avg('Rating__score') or 0,
+                        number_of_ratings = Count('Rating')
+                        ).order_by('-average_score').filter(is_vegetarian=is_vegetarian).order_by('-recipe_id')
             for recipe in recipes:
                 recipe.average_score = round(recipe.average_score, 1) if recipe.average_score else None
             serializer = RecipeSerializer(recipes , many=True)

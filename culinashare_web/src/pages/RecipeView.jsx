@@ -18,6 +18,7 @@ const RecipeView = () => {
   const[isOpen , setIsOpen] = useState(false)
   const[rating , setRating] = useState(0);
   const[comment,setComment] = useState('');
+  const[ifIngredientsVisible , setIfIngredientsVisible] = useState(true);
 
   const fetchRecipe = async() =>{
     const response = await fetch(`${backendUrl}/food/recipies/recipe=${recipeId}`);
@@ -84,17 +85,32 @@ const RecipeView = () => {
     }
     
   }
+  useEffect(()=>{
+    const  handleWidthResize = () => {
+      if(window.innerWidth  < 1024){
+        setIfIngredientsVisible(false)
+      }
+      else{
+        setIfIngredientsVisible(true)
+      }
+    }
+    
+    window.addEventListener('resize' , handleWidthResize);
+    handleWidthResize();
+    return () => window.removeEventListener('resize',handleWidthResize)
+  })
 
 
   return (
     <>
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}  />
-    <div className='mt-16 p-8 min-h-[70vh] grid w-[100vw] lg:grid-cols-[70%_25%] grid-cols-1 bg-[#F0F8FF]  place-items-center gap-8'>
+    <div className='mt-16 p-8 min-h-[70vh] grid w-[100vw] lg:grid-cols-[65%_30%] grid-cols-1 bg-[#F0F8FF]  place-items-center gap-8'>
       
       <div className='bg-white/80 h-full w-full  backdrop-blur-md shadow-md rounded-lg p-8  '>
         <Procedure recipe={recipe} procedure={procedure} />
       </div>
-      <div className='bg-white/80 h-full  backdrop-blur-md shadow-md rounded-lg p-8 w-full'>
+      {ifIngredientsVisible &&
+      <div className='bg-white/80 h-full   backdrop-blur-md shadow-md rounded-lg p-8 w-full'>
       <p className='text-4xl font-bold text-orange-600'>Ingredients</p>
         <table className='w-full table border'>
           <tr className='text-left bg-slate-600 text-white'>
@@ -113,6 +129,7 @@ const RecipeView = () => {
           ))}
         </table>
       </div>
+      }
     </div>
     
     <div className='flex flex-col items-center justify-center w-[100vw] my-4'>

@@ -16,6 +16,7 @@ const Welcome = () => {
   const[categories , setCategories] = useState([]);
   const [users , setUsers] = useState([]);
   const[activeCategory , setActiveCategory] = useState('');
+  const[dietary , setDietary] = useState("");
 
   const[currentPage , setCurrentPage] = useState(1);
   const[cardsPerPage , setCardsPerPage] = useState(8);
@@ -34,11 +35,31 @@ const Welcome = () => {
   }
 
   const recipeList =async () =>{
-    
-    const fetchRecipe = await fetch(`${backendUrl}/food/recipies/${activeCategory}`);
+    let recipeUrl = `${backendUrl}/food/recipies/`;
+
+    if(activeCategory !== '' && dietary !== ""){
+      recipeUrl += `${activeCategory}/`;
+      recipeUrl += dietary === 'true'? 'vegetarian' :  'non-vegetarian'
+    }
+    else if(activeCategory !== ''){
+      recipeUrl += `category=${activeCategory}`
+    }
+    else if(dietary !== ""){
+      if(dietary === "true"){
+        recipeUrl += `vegetarian`;
+      }
+      else{
+        recipeUrl += `non-vegetarian`
+      }
+      
+    }
+    const fetchRecipe = await fetch(`${recipeUrl}`);
     const fetchRecipeResponse = await fetchRecipe.json();   
     setRecipies(fetchRecipeResponse);
   }
+  useEffect(() =>{
+    recipeList();
+  },[dietary,activeCategory])
 
   const categoryList = async() =>{
     const fetchCategories = await fetch(`${backendUrl}/food/categories/`);
@@ -82,12 +103,14 @@ const Welcome = () => {
   useEffect(() => {
     categoryList();
   },[])
-  useEffect(() =>{
-    recipeList();
-  },[activeCategory])
+
+
+
   useEffect(() => {
     getUsers();
   },[])
+
+ 
 
   useEffect(()=>{
     const  handleWidthResize = () => {
@@ -144,6 +167,7 @@ const Welcome = () => {
           </div>
           
           <div className='flex flex-row items-center justify-between w-[80%] gap-4 lg:w-[60%]  flex-wrap  text-lg font-semibold'>
+            {window.innerWidth > 500 ?
             <div className='flex gap-1 lg:gap-4 flex-wrap'>
               <button  onClick={()=> handleCategory('')} className={`px-4 py-1 text-sm md:text-md lg:text-xl font-light font-poppins  rounded-full ${activeCategory === '' ? ' text-slate-600  bg-white ':'  backdrop-blur-md shadow-md bg-white/20'}`} >
                   All
@@ -154,13 +178,27 @@ const Welcome = () => {
                 </button>
               ))}
             </div>
-              
-            <select className='px-4 py-1 outline-none text-sm md:text-md lg:text-xl font-light font-poppins  rounded-lg backdrop-blur-md shadow-md bg-white/20'>
-              <option  className=' bg-orange-500' disabled selected>--Select Dietary--</option>
+            :
+            <select value={activeCategory} onChange={(e) => setActiveCategory(e.target.value)} 
+              className='px-4 py-1 outline-none text-sm md:text-md lg:text-xl font-light font-poppins  rounded-lg backdrop-blur-md shadow-md bg-white/20 w-2/5'>
+              <option value=''   className=' bg-orange-500' disabled selected>--Select Category--</option>
               <option value="" className=' bg-orange-500'>All</option>
-              <option className=' bg-orange-500' value={true}>Veg</option>
-              <option className=' bg-orange-500' value={false}>Non-Veg</option>
+              {categories.map((category , index) => (
+                <option key={index} className=' bg-orange-500' value={category.id} >
+                 {category.name}
+                </option>
+              ))}
+              
             </select>
+              }
+            <select value={dietary} onChange={(e) => setDietary(e.target.value)} 
+              className='px-4 py-1 outline-none text-sm md:text-md lg:text-xl font-light font-poppins  rounded-lg backdrop-blur-md shadow-md bg-white/20 w-2/4 md:w-[20%]'>
+              <option value=''   className=' bg-orange-500' disabled selected>-- Dietary--</option>
+              <option value="" className=' bg-orange-500'>All</option>
+              <option  className=' bg-orange-500' value="true">Veg</option>
+              <option className=' bg-orange-500' value="false">Non-Veg</option>
+            </select>
+            
           </div>
         </div>
 
