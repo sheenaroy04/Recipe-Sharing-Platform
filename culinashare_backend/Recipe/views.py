@@ -81,4 +81,10 @@ class RatingView(APIView):
         response = Rating.objects.annotate(username=F('user__username')).all()
         serializer = RatingSerializer(response , many=True)
         return Response(serializer.data)
+    def post(self,request):
+        ratingsData = RatingSerializer(data=request.data)
+        if ratingsData.is_valid():
+            ratingsData.save()
+            return Response({'message' : 'Your feedback is posted'} , status=status.HTTP_201_CREATED)
+        return Response({'error' : 'Error while posting comment'})
     

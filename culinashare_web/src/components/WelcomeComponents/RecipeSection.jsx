@@ -28,8 +28,8 @@ const RecipeCard = ({currentItems , categories , users}) =>{
             {currentItems.map((recipe , index) =>(
 
               <div  key={index} className='h-[45h] bg-black/30 backdrop-blur-md shadow-md   rounded-lg drop-shadow-2xl flex flex-col cursor-pointer'>
-                <div className='w-full h-2/4 flex'>
-                  <img src={`${imageAPIUrl}/${recipe.image}`} alt="" className='w-full h-full rounded-lg' />
+                <div className='w-full h-2/4 flex overflow-hidden'>
+                  <img src={`${imageAPIUrl}/${recipe.image}`} alt="" className='w-full h-full rounded-lg hover:scale-110 transition duration-300 ease-in-out' />
                 </div>
 
                 <div className='w-full h-2/4 flex flex-col justify-around p-2'>

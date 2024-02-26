@@ -143,15 +143,24 @@ const Welcome = () => {
             <MagnifyingGlassIcon className="h-6 w-6 text-white" />
           </div>
           
-          <div className='flex flex-row items-center  flex-wrap gap-1 lg:gap-4 w-[80%] lg:w-[60%] text-lg font-semibold'>
+          <div className='flex flex-row items-center justify-between w-[80%] gap-4 lg:w-[60%]  flex-wrap  text-lg font-semibold'>
+            <div className='flex gap-1 lg:gap-4 flex-wrap'>
               <button  onClick={()=> handleCategory('')} className={`px-4 py-1 text-sm md:text-md lg:text-xl font-light font-poppins  rounded-full ${activeCategory === '' ? ' text-slate-600  bg-white ':'  backdrop-blur-md shadow-md bg-white/20'}`} >
-                All
-              </button>
-            {categories.map((category , index) => (
-              <button key={index} onClick={()=> handleCategory(category.id)} className={`px-4 py-1 text-sm md:text-md lg:text-xl font-light font-poppins   rounded-full ${activeCategory === category.id ? ' text-slate-600  bg-white ':' backdrop-blur-md shadow-md bg-white/20'}`} >
-                {category.name}
-              </button>
-            ))}
+                  All
+                </button>
+              {categories.map((category , index) => (
+                <button key={index} onClick={()=> handleCategory(category.id)} className={`px-4 py-1 text-sm md:text-md lg:text-xl font-light font-poppins   rounded-full ${activeCategory === category.id ? ' text-slate-600  bg-white ':' backdrop-blur-md shadow-md bg-white/20'}`} >
+                 {category.name}
+                </button>
+              ))}
+            </div>
+              
+            <select className='px-4 py-1 outline-none text-sm md:text-md lg:text-xl font-light font-poppins  rounded-lg backdrop-blur-md shadow-md bg-white/20'>
+              <option  className=' bg-orange-500' disabled selected>--Select Dietary--</option>
+              <option value="" className=' bg-orange-500'>All</option>
+              <option className=' bg-orange-500' value={true}>Veg</option>
+              <option className=' bg-orange-500' value={false}>Non-Veg</option>
+            </select>
           </div>
         </div>
 
