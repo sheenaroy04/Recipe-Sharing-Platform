@@ -5,7 +5,7 @@ const Procedure = ({recipe , procedure}) => {
   return (
     <>
     <div className='flex flex-row items-start justify-between'>
-            <p className='text-4xl font-bold text-orange-600 my-2'>{recipe.title}</p>
+            <p className='text-2xl md:text-4xl font-bold text-orange-600 my-2'>{recipe.title}</p>
             <div className='flex flex-col items-center'>
               <div className='flex flex-row items-center justify-center'>
                 {Array.from({length : 5}).map((_,index)=>(
@@ -21,7 +21,7 @@ const Procedure = ({recipe , procedure}) => {
         </div>
         
         <p>{recipe.description}</p>
-        <p className='text-4xl font-bold text-orange-600 my-2'>Procedure</p>
+        <p className='text-2xl md:text-4xl font-bold text-orange-600 my-2'>Procedure</p>
         
         <ol className='ml-4'>
         {procedure.map((step,index)=>(

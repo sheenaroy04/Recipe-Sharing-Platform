@@ -52,7 +52,7 @@ class RecipeView(APIView):
             recipes = Recipe.objects.annotate(
                         average_score = Avg('Rating__score') or 0,
                         number_of_ratings = Count('Rating')
-                        ).order_by('-average_score').filter(is_vegetarian=is_vegetarian).order_by('-recipe_id')
+                        ).order_by('-recipe_id').filter(is_vegetarian=is_vegetarian).order_by('-average_score')
             for recipe in recipes:
                 recipe.average_score = round(recipe.average_score, 1) if recipe.average_score else None
             serializer = RecipeSerializer(recipes , many=True)

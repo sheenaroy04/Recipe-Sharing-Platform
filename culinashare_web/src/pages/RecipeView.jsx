@@ -6,6 +6,8 @@ import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { useSelector } from 'react-redux';
 import Modal from '../components/Modal';
 import sad from '../images/sad.svg';
+import Ingredients from '../components/RecipeViewComponent/Ingredients';
+import { ChevronLeftIcon , ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const RecipeView = () => {
   const {recipeId} = useParams();
@@ -18,7 +20,8 @@ const RecipeView = () => {
   const[isOpen , setIsOpen] = useState(false)
   const[rating , setRating] = useState(0);
   const[comment,setComment] = useState('');
-  const[ifIngredientsVisible , setIfIngredientsVisible] = useState(true);
+  const[isIngredientsVisible , setIsIngredientsVisible] = useState(true);
+  const[showIngredientBar , setShowIngredientBar] = useState(false);
 
   const fetchRecipe = async() =>{
     const response = await fetch(`${backendUrl}/food/recipies/recipe=${recipeId}`);
@@ -88,10 +91,10 @@ const RecipeView = () => {
   useEffect(()=>{
     const  handleWidthResize = () => {
       if(window.innerWidth  < 1024){
-        setIfIngredientsVisible(false)
+        setIsIngredientsVisible(false)
       }
       else{
-        setIfIngredientsVisible(true)
+        setIsIngredientsVisible(true)
       }
     }
     
@@ -104,37 +107,34 @@ const RecipeView = () => {
   return (
     <>
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}  />
-    <div className='mt-16 p-8 min-h-[70vh] grid w-[100vw] lg:grid-cols-[65%_30%] grid-cols-1 bg-[#F0F8FF]  place-items-center gap-8'>
+    <div className='mt-16 p-4 md:p-8 min-h-[70vh] grid w-[100vw] lg:grid-cols-[65%_30%] grid-cols-1 bg-[#F0F8FF]  place-items-center gap-2 md:gap-8'>
       
-      <div className='bg-white/80 h-full w-full  backdrop-blur-md shadow-md rounded-lg p-8  '>
+      <div className='bg-white/80 h-full w-full  backdrop-blur-md shadow-md rounded-lg p-4 md:p-8  '>
         <Procedure recipe={recipe} procedure={procedure} />
       </div>
-      {ifIngredientsVisible &&
+      {isIngredientsVisible ?
       <div className='bg-white/80 h-full   backdrop-blur-md shadow-md rounded-lg p-8 w-full'>
-      <p className='text-4xl font-bold text-orange-600'>Ingredients</p>
-        <table className='w-full table border'>
-          <tr className='text-left bg-slate-600 text-white'>
-            <th className='py-2 px-4'>
-              Name
-            </th>
-            <th className='py-2 px-4'>
-              Quantity
-            </th>
-          </tr>
-          {ingredients.map((ingredient) => (
-            <tr key={ingredient.id}>
-              <td className='py-2 px-4'>{ingredient.ingredient_name}</td>
-              <td className='py-2 px-4'>{ingredient.quantity}</td>
-            </tr>
-          ))}
-        </table>
-      </div>
+        <Ingredients ingredients={ingredients}/>
+        </div>:
+        <>
+        <button onClick={()=>setShowIngredientBar(true)} className=' flex flex-row items-center fixed bottom-10 right-0 z-30 bg-gradient-to-br from-orange-600/80 to-orange-500/80 px-4 py-2 text-lg font-bold text-white rounded-l-full'>
+          <ChevronLeftIcon className="h-6 w-6 " />
+            View Ingredients
+          </button>
+          <div className={`fixed top-0 right-0 z-30  w-5/6 h-full mt-20 p-4 bg-[#F0F8FF] transform transition-transform duration-300
+          ease-in-out ${showIngredientBar ? 'translate-x-0' : 'translate-x-full'}`}>
+            <Ingredients ingredients={ingredients}/>
+            <button onClick={()=>setShowIngredientBar(false)} className='flex flex-row  w-full items-center justify-center p-2 bg-orange-600 my-4 text-white font-bold text-lg'>Close <ChevronRightIcon className="h-4 w-4" />
+</button>
+          </div>
+        </>
+        
       }
     </div>
     
     <div className='flex flex-col items-center justify-center w-[100vw] my-4'>
       <div className='flex flex-col w-1/2 items-center justify-center mb-2 gap-3'>
-        <p className='text-4xl font-bold text-orange-600'>Rate this recipe</p>
+        <p className='text-2xl md:text-4xl font-bold text-orange-600 text-center'>Rate this recipe</p>
         <div className='flex flex-row items-center justify-center'>
         {Array.from({length:5}).map((_,index)=>(
           <StarIcon onClick={()=>handleSetRating(index+1)}  key={index} className={`h-6 w-6 text-gray-600  hover:text-yellow-500 ${rating > index && 'text-yellow-500'} `}/>
@@ -153,7 +153,7 @@ const RecipeView = () => {
 
         {comments.length > 0 ?
         <>
-        <p className='text-4xl font-bold text-orange-600'>Comments</p>
+        <p className='text-2xl md:text-4xl font-bold text-orange-600'>Comments</p>
 
         
         {comments.map((comment , index) =>(
