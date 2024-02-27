@@ -8,6 +8,7 @@ import RecipePostRoute from "./routes/RecipePostRoute";
 import PostRecipe from "./pages/PostRecipe";
 import ScrollToTop from "./routes/ScrollToTop";
 import SideBar from "./components/SideBar";
+import Profile from "./pages/Profile";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         
         <Route element={<RecipePostRoute/>}>
           <Route element={<PostRecipe/>} path="/post-recipe"/>
+          <Route element={<Profile/>} path='/profile'/>
         </Route>
         <Route  path='/recipe/:recipeId' element={<RecipeView/>}/>
         <Route path='*' element={<NotFound/>} />

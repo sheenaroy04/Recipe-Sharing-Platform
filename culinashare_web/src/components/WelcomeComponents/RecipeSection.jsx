@@ -24,13 +24,18 @@ const RecipeCard = ({currentItems , categories , users}) =>{
 
   }
 
-  const checkIfVisible = () =>{
-    const divElement = document.getElementById('recipeDiv');
-    const rect = divElement.getBoundingClientRect();
-    const isVisible = rect.top < window.innerHeight/2  ;
-    setIsRecipeVisible(isVisible);
-  }
+  
   useEffect(() => {
+    const checkIfVisible = () =>{
+      const divElement = document.getElementById('recipeDiv');
+      if(divElement){
+        const rect = divElement.getBoundingClientRect();
+        const isVisible = rect.top <= window.innerHeight  ;
+        setIsRecipeVisible(isVisible);
+      }
+          
+      
+    }
     window.addEventListener('scroll' , checkIfVisible);
     return () => window.removeEventListener('scroll' , checkIfVisible);
   },[])
@@ -40,11 +45,14 @@ const RecipeCard = ({currentItems , categories , users}) =>{
     return(
       <div className='w-[100vw] flex items-center justify-center my-10 '>
         <Loading showLoading={isLoading} />
-          <div id='recipeDiv' className={`w-[80%]  grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 ${isRecipeVisible ? 'opacity-100' : 'opacity-25'} `} >
+          <div  className={`w-[80%]  grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 transition duration-500 gap-4  `} >
             {currentItems.length > 0 &&<>
             {currentItems.map((recipe , index) =>(
 
-              <div  key={index} className='h-[45h] bg-black/30 backdrop-blur-md shadow-md   rounded-lg drop-shadow-2xl flex flex-col cursor-pointer'>
+              <div id='recipeDiv'  key={index} className={`h-[45h] bg-black/30 backdrop-blur-md shadow-md   
+                                                      rounded-lg drop-shadow-2xl flex flex-col cursor-pointer  
+                                                      transition-transform duration-500 
+                                                      ${isRecipeVisible ? ' translate-y-0 opacity-100' : 'translate-y-40 opacity-0'}`}>
                 <div className='w-full h-2/4 flex overflow-hidden'>
                   <img src={`${imageAPIUrl}/${recipe.image}`} alt="" className='w-full h-full rounded-lg hover:scale-110 transition duration-300 ease-in-out' />
                 </div>
