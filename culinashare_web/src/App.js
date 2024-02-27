@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import RecipePostRoute from "./routes/RecipePostRoute";
 import PostRecipe from "./pages/PostRecipe";
 import ScrollToTop from "./routes/ScrollToTop";
+import SideBar from "./components/SideBar";
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
   return (
     <>
       <NavBar/>
+      <SideBar/>
       <ScrollToTop/>
       <Routes>
         

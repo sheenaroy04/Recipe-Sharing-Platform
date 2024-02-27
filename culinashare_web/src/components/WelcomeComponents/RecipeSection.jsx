@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline";
 import { Link } from 'react-router-dom';
 import { ClockIcon  ,ShareIcon} from "@heroicons/react/24/outline";
@@ -12,6 +12,8 @@ import nofood from '../../images/nofood.webp';
 const RecipeCard = ({currentItems , categories , users}) =>{
   const[isLoading , setIsLoading] = useState(false);
 
+  const[isRecipeVisible , setIsRecipeVisible] = useState(false);
+
   const navigate = useNavigate();
   const navigateTo = (loc) => {
     setIsLoading(true);
@@ -21,13 +23,24 @@ const RecipeCard = ({currentItems , categories , users}) =>{
     },4000)
 
   }
+
+  const checkIfVisible = () =>{
+    const divElement = document.getElementById('recipeDiv');
+    const rect = divElement.getBoundingClientRect();
+    const isVisible = rect.top < window.innerHeight/2  ;
+    setIsRecipeVisible(isVisible);
+  }
+  useEffect(() => {
+    window.addEventListener('scroll' , checkIfVisible);
+    return () => window.removeEventListener('scroll' , checkIfVisible);
+  },[])
   
 
     const imageAPIUrl = process.env.REACT_APP_IMAGE_URL;
     return(
       <div className='w-[100vw] flex items-center justify-center my-10 '>
         <Loading showLoading={isLoading} />
-          <div className='w-[80%]  grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 ' >
+          <div id='recipeDiv' className={`w-[80%]  grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 ${isRecipeVisible ? 'opacity-100' : 'opacity-25'} `} >
             {currentItems.length > 0 &&<>
             {currentItems.map((recipe , index) =>(
 

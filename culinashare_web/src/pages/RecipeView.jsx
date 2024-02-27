@@ -23,6 +23,8 @@ const RecipeView = () => {
   const[isIngredientsVisible , setIsIngredientsVisible] = useState(true);
   const[showIngredientBar , setShowIngredientBar] = useState(false);
 
+  const[openPage , setOpenPage] = useState('');
+
   const fetchRecipe = async() =>{
     const response = await fetch(`${backendUrl}/food/recipies/recipe=${recipeId}`);
     const responseData = await response.json();
@@ -55,7 +57,8 @@ const RecipeView = () => {
       setRating(rate);
     }
     else{
-      setIsOpen(true)
+      setIsOpen(true);
+      setOpenPage('login');
     }
   }
 
@@ -105,11 +108,11 @@ const RecipeView = () => {
 
 
   return (
-    <>
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}  />
+    <div onClick={()=>showIngredientBar && setShowIngredientBar(!showIngredientBar)}>
+    <Modal isOpen={isOpen} openPage={openPage} setOpenPage={setOpenPage} onClose={() => setIsOpen(false)}  />
     <div className='mt-16 p-4 md:p-8 min-h-[70vh] grid w-[100vw] lg:grid-cols-[65%_30%] grid-cols-1 bg-[#F0F8FF]  place-items-center gap-2 md:gap-8'>
       
-      <div className='bg-white/80 h-full w-full  backdrop-blur-md shadow-md rounded-lg p-4 md:p-8  '>
+      <div className='bg-white/80 h-full w-full  backdrop-blur-md shadow-md rounded-lg p-4 md:p-8 mt-32 md:mt-0 '>
         <Procedure recipe={recipe} procedure={procedure} />
       </div>
       {isIngredientsVisible ?
@@ -117,15 +120,16 @@ const RecipeView = () => {
         <Ingredients ingredients={ingredients}/>
         </div>:
         <>
-        <button onClick={()=>setShowIngredientBar(true)} className=' flex flex-row items-center fixed bottom-10 right-0 z-30 bg-gradient-to-br from-orange-600/80 to-orange-500/80 px-4 py-2 text-lg font-bold text-white rounded-l-full'>
+        <button onClick={()=>setShowIngredientBar(true)} className=' flex flex-row items-center fixed top-20 right-0 z-30 bg-gradient-to-br from-orange-600/90 to-orange-500/80 px-4 py-2 text-lg font-bold text-white rounded-l-full'>
           <ChevronLeftIcon className="h-6 w-6 " />
             View Ingredients
           </button>
-          <div className={`fixed top-0 right-0 z-30  w-5/6 h-full mt-20 p-4 bg-[#F0F8FF] transform transition-transform duration-300
+          <div className={`fixed top-0 right-0 z-30  w-5/6 h-full mt-20 p-4 bg-[#F0F8FF] shadow-lg  backdrop-blur-md transform transition-transform duration-300
           ease-in-out ${showIngredientBar ? 'translate-x-0' : 'translate-x-full'}`}>
+            
+            <button onClick={()=>setShowIngredientBar(false)} className='flex flex-row  w-full  items-center justify-center p-2  my-4  font-bold text-lg'> &#10060; Close
+            </button>
             <Ingredients ingredients={ingredients}/>
-            <button onClick={()=>setShowIngredientBar(false)} className='flex flex-row  w-full items-center justify-center p-2 bg-orange-600 my-4 text-white font-bold text-lg'>Close <ChevronRightIcon className="h-4 w-4" />
-</button>
           </div>
         </>
         
@@ -178,7 +182,7 @@ const RecipeView = () => {
     </div>
     
 
-    </>
+    </div>
   )
 }
 

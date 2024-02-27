@@ -162,7 +162,7 @@ const Welcome = () => {
         <div id='featured' className='flex flex-col items-center w-[100vw] bg-gradient-to-r from-orange-700 to-orange-500 text-white'>
         <div className='w-full flex flex-col items-center justify-center mb-4'>
             <img className='h-[20vh] w-[30vw] md:h-[25vh] md:w-[15vw]' src={cooking} alt="" />
-            <p className='text-6xl   font-culina-share'>Featured Recipes</p>
+            <p className='text-4xl md:text-6xl   font-culina-share'>Featured Recipes</p>
         </div>
         
 

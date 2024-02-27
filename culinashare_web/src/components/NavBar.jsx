@@ -3,6 +3,9 @@ import Modal from './Modal';
 import logo from '../images/culinashare_logo.png';
 import { UserIcon } from "@heroicons/react/24/outline";
 import {  useSelector } from 'react-redux';
+import { Bars3BottomRightIcon } from "@heroicons/react/24/outline";
+import SideBar from './SideBar';
+
 
 const NavBar = () => {
   const[isModalOpen , setIsModalOpen] = useState(false);
@@ -11,6 +14,8 @@ const NavBar = () => {
 
   const[isNavVisible , setIsNavVisible] = useState(true);
   const[lastScrollY , setLastScrollY] = useState(0);
+
+  const[isSideBarOpen , setIsSideBarOpen] = useState(false);
 
   const modalOpen = (openPage) =>{
     setIsModalOpen(true);
@@ -42,9 +47,10 @@ const NavBar = () => {
     }
   },[lastScrollY])
   return (
-    <div className={`h-16 flex items-center justify-between px-2 md:px-6
+    <>
+    <div className={`h-16 flex items-center justify-between px-2 md:px-6 z-50 
                    fixed top-0 w-[100vw] bg-gradient-to-br transition-transform duration-300
-                    ease-in-out from-slate-900/90 to-slate-700/90 z-20
+                    ease-in-out from-slate-900/90 to-slate-700/90 
                     ${isNavVisible ? 'translate-y-0' : '-translate-y-full'}
                     `}>
         
@@ -56,6 +62,10 @@ const NavBar = () => {
                 {user ? <>
                       <p className='font-poppins text-xl font-semibold text-orange-600'>{user.userName}</p>
                       <UserIcon className="h-7 w-7 text-white font-bold" />
+                      <button onClick={() => setIsSideBarOpen(!isSideBarOpen)}>
+                        <Bars3BottomRightIcon   className="h-10 w-8 text-white font-bold" />
+                      </button>
+                      
                       </>
                         :
                         <>
@@ -67,9 +77,12 @@ const NavBar = () => {
                             
         </div>
 
-        <Modal isOpen={isModalOpen} openPage={openPage} setOpenPage={setOpenPage}  onClose={modalClose}/>
+        
 
     </div>
+    <SideBar isSideBarOpen={isSideBarOpen}/>
+    <Modal isOpen={isModalOpen} openPage={openPage} setOpenPage={setOpenPage}  onClose={modalClose}/>
+    </>
   )
 }
 
