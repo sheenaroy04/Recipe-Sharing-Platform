@@ -64,8 +64,8 @@ const RecipeCard = ({currentItems , categories , users}) =>{
                       <p className='text-xl font-semibold'>{recipe.title}</p>
                       {
                         users.filter((user) => user.id === recipe.author).map((userData) => (
-                          <p className='font-poppins font-regular  text-xs font-semibold text-orange-500' key={userData.id}>
-                            @{userData.username}
+                          <p className='font-poppins font-regular  text-xs font-semibold text-orange-500 hover:underline' key={userData.id}>
+                            <Link to={`profile/${userData.id}`}>@{userData.username}</Link>
                           </p>
                         ))
                       }

@@ -24,7 +24,7 @@ function App() {
         
         <Route element={<RecipePostRoute/>}>
           <Route element={<PostRecipe/>} path="/post-recipe"/>
-          <Route element={<Profile/>} path='/profile'/>
+          <Route element={<Profile/>} path='/profile/:userId'/>
         </Route>
         <Route  path='/recipe/:recipeId' element={<RecipeView/>}/>
         <Route path='*' element={<NotFound/>} />
