@@ -11,6 +11,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     
     average_score =serializers.FloatField(read_only=True)
     number_of_ratings = serializers.IntegerField(read_only=True)
+
     
     class Meta:
         model = Recipe

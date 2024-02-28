@@ -6,6 +6,7 @@ import RecipeSection from '../components/WelcomeComponents/RecipeSection';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal';
+import { DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
 
 const Welcome = () => {
   const backendUrl = process.env.REACT_APP_BASE_API_URL;
@@ -27,6 +28,7 @@ const Welcome = () => {
   const[isModalOpen , setIsModalOpen] = useState(false);
   const[openPage , setOpenPage] = useState('');
   const[showCategoriesInSelect , setShowCategoriesInSelect] = useState(false);
+  
 
 
   const pageNumbers = []
@@ -142,16 +144,26 @@ const Welcome = () => {
       <Modal isOpen={isModalOpen} openPage={openPage} setOpenPage={setOpenPage} onClose={modalClose}  />
       
         <div className='welcome flex flex-col items-center justify-center'>
-          <div className='bg-slate-800/60 py-12  w-full flex items-center justify-center flex-col gap-6 text-white'>
+          <div className='bg-slate-800/60 py-12  w-full flex items-center justify-center flex-col gap-6 text-white
+                  
+                        '>
             <div className='text-2xl sm:text-4xl md:text-5xl lg:text-7xl text-center font-bold '>
               <p className='text-orange-600'>Where every bite unfolds a story.</p>
               <p >In every dish, a journey discovered.</p> 
             </div>
             
-            
-            <button onClick={newRecipeShareNavigation} className='px-6 font-poppins py-2 bg-orange-500 transition duration-200 hover:bg-orange-700 rounded-sm hover:scale-105 text-xl text-[#F0F8FF]  shadow-md shadow-black'>
-               Begin Your Culinary Journey
-            </button>
+            <div className='flex flex-col md:flex-row items-stretch  md:items-center justify-center gap-4'>
+              <button onClick={newRecipeShareNavigation} className='px-6 font-poppins py-2 bg-orange-500 transition duration-200 hover:bg-orange-700 rounded-sm hover:scale-105
+               text-l md:text-lg text-[#F0F8FF]  shadow-md shadow-black'>
+                Begin Your Culinary Journey
+              </button>
+              <button className='px-6  font-poppins py-2 bg-slate-600 transition duration-200 hover:bg-slate-500 
+                                rounded-sm hover:scale-105 text-l md:text-lg text-white  shadow-md shadow-black
+                                flex flex-row gap-1 items-center justify-center    '>
+               Get the App
+               <DevicePhoneMobileIcon className="h-6 w-6 text-white" />
+              </button>
+            </div>
             
             
             
@@ -198,8 +210,7 @@ const Welcome = () => {
               }
             <select value={dietary} onChange={(e) => setDietary(e.target.value)} 
               className='px-4 py-1 outline-none text-sm md:text-md lg:text-xl font-light font-poppins  rounded-lg backdrop-blur-md shadow-md bg-white/20 w-2/4 md:w-[20%]'>
-              <option value=''   className=' bg-orange-500' disabled selected>-- Dietary--</option>
-              <option value="" className=' bg-orange-500'>All</option>
+              <option value="" className=' bg-orange-500'>All (Dietary)</option>
               <option  className=' bg-orange-500' value="true">Veg</option>
               <option className=' bg-orange-500' value="false">Non-Veg</option>
             </select>

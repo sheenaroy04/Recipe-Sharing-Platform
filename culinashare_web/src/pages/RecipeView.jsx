@@ -8,6 +8,7 @@ import Modal from '../components/Modal';
 import sad from '../images/sad.svg';
 import Ingredients from '../components/RecipeViewComponent/Ingredients';
 import { ChevronLeftIcon , ChevronRightIcon } from "@heroicons/react/24/outline";
+import Loading from '../components/Loading';
 
 const RecipeView = () => {
   const {recipeId} = useParams();
@@ -22,6 +23,8 @@ const RecipeView = () => {
   const[comment,setComment] = useState('');
   const[isIngredientsVisible , setIsIngredientsVisible] = useState(true);
   const[showIngredientBar , setShowIngredientBar] = useState(false);
+  const[showLoading , setShowLoading] = useState(false);
+  const[message , setMessage] = useState('');
 
   const[openPage , setOpenPage] = useState('');
 
@@ -64,9 +67,11 @@ const RecipeView = () => {
 
   const postComment = async() =>{
     if(comment === ''){
-      alert('Enter comment')
+      alert('Send us rating with your feedback comment...')
     }
     else{
+      setShowLoading(true);
+      setMessage('Posting your feedback...')
       const data = {
         recipe : recipeId,
         user : user.userId,
@@ -82,7 +87,14 @@ const RecipeView = () => {
           body:JSON.stringify(data)
         });
         const response = await postCommentRequest.json()
-        console.log(response);
+        // console.log(response);
+        setMessage(response.message);
+        setTimeout(() =>{
+          setShowLoading(false);
+          setMessage('');
+          window.location.reload();
+        },2000);
+        
   
       } catch (error) {
         
@@ -109,6 +121,7 @@ const RecipeView = () => {
 
   return (
     <div onClick={()=>showIngredientBar && setShowIngredientBar(!showIngredientBar)}>
+      <Loading showLoading={showLoading} message={message} />
     <Modal isOpen={isOpen} openPage={openPage} setOpenPage={setOpenPage} onClose={() => setIsOpen(false)}  />
     <div className='mt-16 p-4 md:p-8 min-h-[70vh] grid w-[100vw] lg:grid-cols-[65%_30%] grid-cols-1 bg-[#F0F8FF]  place-items-center gap-2 md:gap-8'>
       
@@ -120,11 +133,11 @@ const RecipeView = () => {
         <Ingredients ingredients={ingredients}/>
         </div>:
         <>
-        <button onClick={()=>setShowIngredientBar(true)} className=' flex flex-row items-center fixed top-20 right-0 z-30 bg-gradient-to-br from-orange-600/90 to-orange-500/80 px-4 py-2 text-lg font-bold text-white rounded-l-full'>
+        <button onClick={()=>setShowIngredientBar(true)} className=' flex flex-row items-center fixed top-20 right-0 z-20 bg-gradient-to-br from-orange-600/90 to-orange-500/80 px-4 py-2 text-lg font-bold text-white rounded-l-full'>
           <ChevronLeftIcon className="h-6 w-6 " />
             View Ingredients
           </button>
-          <div className={`fixed top-0 right-0 z-30  w-5/6 h-full mt-20 p-4 bg-[#F0F8FF] shadow-lg  backdrop-blur-md transform transition-transform duration-300
+          <div className={`fixed top-0 right-0 z-20  w-5/6 h-full mt-20 p-4 bg-[#F0F8FF] shadow-lg  backdrop-blur-md transform transition-transform duration-300
           ease-in-out ${showIngredientBar ? 'translate-x-0' : 'translate-x-full'}`}>
             
             <button onClick={()=>setShowIngredientBar(false)} className='flex flex-row  w-full  items-center justify-center p-2  my-4  font-bold text-lg'> &#10060; Close

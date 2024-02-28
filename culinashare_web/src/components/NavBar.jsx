@@ -11,7 +11,7 @@ const NavBar = () => {
   const[isModalOpen , setIsModalOpen] = useState(false);
   const[openPage , setOpenPage] = useState('');
   const user = useSelector(state =>  state.user);
-
+  const [isMobileScreen , setIsMobileScreen] = useState(false);
   const[isNavVisible , setIsNavVisible] = useState(true);
   const[lastScrollY , setLastScrollY] = useState(0);
 
@@ -46,6 +46,24 @@ const NavBar = () => {
       return () => window.removeEventListener('scroll',controlNavBar);
     }
   },[lastScrollY])
+
+  useEffect(() =>{
+    const handleMobileView = () =>{
+      if(typeof window !== null){
+        if(window.innerWidth < 550){
+          setIsMobileScreen(true);
+        }
+        else{
+          setIsMobileScreen(false);
+        }
+      }
+    }
+    window.addEventListener('resize' , handleMobileView);
+    return () => window.removeEventListener('resize' , handleMobileView)
+  })
+
+
+
   return (
     <>
     <div className={`h-16 flex items-center justify-between px-2 md:px-6 z-50 
@@ -55,13 +73,14 @@ const NavBar = () => {
                     `}>
         
         <img src={logo} className='h-16 w-[40vw] md:w-[14vw] lg:[18vw]' alt='logo' />
-        <div className='text-white flex items-center justify-center gap-4'>
+        <div className='text-white flex items-center justify-center gap-2 md:gap-4'>
             
                 {/* <a  href="#home">Home</a>
                 <a  href="#featured">Featured</a> */}
                 {user ? <>
-                      <p className='font-poppins text-xl font-semibold text-orange-600'>{user.userName}</p>
-                      <UserIcon className="h-7 w-7 text-white font-bold" />
+
+                      <p className='font-poppins text-md md:text-xl font-semibold text-orange-600'>{user.userName}</p>
+                      <UserIcon className="h-5 w-5 md:h-7 md:w-7  text-white font-bold" />
                       <button onClick={() => setIsSideBarOpen(!isSideBarOpen)}>
                         <Bars3BottomRightIcon   className="h-10 w-8 text-white font-bold" />
                       </button>
@@ -69,8 +88,15 @@ const NavBar = () => {
                       </>
                         :
                         <>
-                        <button onClick={()=>modalOpen('signup')} className='border border-orange-600 px-4 py-1 text-lg rounded-md font-semibold'>Register</button>
-                <button onClick={()=>modalOpen('login')} className='bg-orange-600 px-4 py-1 text-lg rounded-md font-semibold'>Login</button>
+                        {isMobileScreen ? 
+                          <button onClick={()=>modalOpen('login')} className='border border-orange-600 px-4 py-1 text-l rounded-md font-semibold'>Register/Login</button>
+                          :
+                          <>
+                            <button onClick={()=>modalOpen('signup')} className='border border-orange-600 px-4 py-1 text-lg rounded-md font-semibold'>Register</button>
+                        <button onClick={()=>modalOpen('login')} className=' bg-orange-600 px-4 py-1 text-lg rounded-md font-semibold'>Login</button>
+                          </>
+                      }
+                        
                         </>
                         }
                 

@@ -44,7 +44,7 @@ const RecipeCard = ({currentItems , categories , users}) =>{
     const imageAPIUrl = process.env.REACT_APP_IMAGE_URL;
     return(
       <div className='w-[100vw] flex items-center justify-center my-10 '>
-        <Loading showLoading={isLoading} />
+        <Loading showLoading={isLoading} message={'Fetching your recipes...'} />
           <div  className={`w-[80%]  grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 transition duration-500 gap-4  `} >
             {currentItems.length > 0 &&<>
             {currentItems.map((recipe , index) =>(

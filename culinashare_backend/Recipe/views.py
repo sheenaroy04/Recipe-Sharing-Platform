@@ -16,7 +16,7 @@ class CategoryView(APIView):
         return Response(serializer.data)
     
 class RecipeView(APIView):
-    def get(self,request,recipe_id=None,categories = None , is_vegetarian=None):
+    def get(self,request,recipe_id=None,categories = None , is_vegetarian=None , author=None):
         if recipe_id is not None:
             recipes = Recipe.objects.annotate(
                         average_score = Avg('Rating__score') or 0,
@@ -27,7 +27,19 @@ class RecipeView(APIView):
             serializer = RecipeSerializer(recipes)
             return Response(serializer.data)
         
-        if categories is not None and is_vegetarian is not None:
+        elif author is not None:
+            recipes = Recipe.objects.annotate(
+                        average_score = Avg('Rating__score') or 0,
+                        number_of_ratings = Count('Rating'),
+                        ).order_by('-average_score').filter(author = author)
+            for recipe in recipes:
+                recipe.average_score = round(recipe.average_score, 1) if recipe.average_score else None
+            
+            
+            serializer = RecipeSerializer(recipes , many=True)
+            return Response( serializer.data)
+        
+        elif categories is not None and is_vegetarian is not None:
             recipes = Recipe.objects.annotate(
                         average_score = Avg('Rating__score') or 0,
                         number_of_ratings = Count('Rating')
@@ -88,7 +100,7 @@ class IngredientView(APIView):
 class RatingView(APIView):
     def get(self,request,recipe=None):
         if recipe is not None:
-            ratings = Rating.objects.annotate(username=F('user__username')).filter(recipe=recipe)
+            ratings = Rating.objects.annotate(username=F('user__username')).filter(recipe=recipe).order_by('-id')
              # Calculate average score and count
             
             ratings_aggregate = ratings.aggregate(Avg('score'), Count('id'))
