@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 const SideBar = ({isSideBarOpen}) => {
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state.user);
   const navigate = useNavigate();
   const logout = () => {
     localStorage.removeItem('access_token');
@@ -21,7 +21,7 @@ const SideBar = ({isSideBarOpen}) => {
           <Link to='/' className='text-white text-xl font-poppins w-full text-left px-4 py-2 hover:text-orange-700'>
             Home
           </Link>
-          <Link to={`/profile/${user.userId}`} className='text-white text-xl font-poppins w-full text-left px-4 py-2 hover:text-orange-700'>
+          <Link to={user&&`/profile/${user.userId}`} className='text-white text-xl font-poppins w-full text-left px-4 py-2 hover:text-orange-700'>
             Profile
           </Link> 
           <Link className='text-white text-xl font-poppins w-full text-left px-4 py-2 hover:text-orange-700'>
