@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal';
 import { DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
+import CategoryLoader from '../components/WelcomeComponents/CategoryLoader';
 
 const Welcome = () => {
   const backendUrl = process.env.REACT_APP_BASE_API_URL;
@@ -14,6 +15,7 @@ const Welcome = () => {
   const navigate = useNavigate();
 
   const[recipies , setRecipies] = useState([]);
+  const[loading,setLoading] = useState(false);
   const[categories , setCategories] = useState([]);
   const [users , setUsers] = useState([]);
   const[activeCategory , setActiveCategory] = useState('');
@@ -38,6 +40,7 @@ const Welcome = () => {
   }
 
   const recipeList =async () =>{
+    setLoading(true);
     let recipeUrl = `${backendUrl}/food/recipies/`;
 
     if(activeCategory !== '' && dietary !== ""){
@@ -59,6 +62,7 @@ const Welcome = () => {
     const fetchRecipe = await fetch(`${recipeUrl}`);
     const fetchRecipeResponse = await fetchRecipe.json();   
     setRecipies(fetchRecipeResponse);
+    setLoading(false);
   }
   useEffect(() =>{
     recipeList();
@@ -190,11 +194,21 @@ const Welcome = () => {
               <button  onClick={()=> handleCategory('')} className={`px-4 py-1 text-sm md:text-md lg:text-xl font-light font-poppins  rounded-full ${activeCategory === '' ? ' text-slate-600  bg-white ':'  backdrop-blur-md shadow-md bg-white/20'}`} >
                   All
                 </button>
+              {categories.length === 0 ? 
+                <>{Array.from({length:4}).map((_,index) =>(
+                  <CategoryLoader key={index} />
+                ))}
+                
+                </>
+                :
+                <>
               {categories.map((category , index) => (
                 <button key={index} onClick={()=> handleCategory(category.id)} className={`px-4 py-1 text-sm md:text-md lg:text-xl font-light font-poppins   rounded-full ${activeCategory === category.id ? ' text-slate-600  bg-white ':' backdrop-blur-md shadow-md bg-white/20'}`} >
                  {category.name}
                 </button>
               ))}
+              </>
+            }
             </div>
             :
             <select value={activeCategory} onChange={(e) => setActiveCategory(e.target.value)} 
@@ -218,7 +232,7 @@ const Welcome = () => {
           </div>
         </div>
 
-        <RecipeSection currentItems={currentItems} categories={categories} users={users} />
+        <RecipeSection currentItems={currentItems} categories={categories} users={users} recipeLoading={loading} />
 
         <div className='flex flex-row my-4 items-center justify-center w-full gap-4'>
               {pageNumbers.length>1 && pageNumbers.map((page) =>(

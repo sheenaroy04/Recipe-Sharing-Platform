@@ -43,7 +43,7 @@ class RecipeView(APIView):
             recipes = Recipe.objects.annotate(
                         average_score = Avg('Rating__score') or 0,
                         number_of_ratings = Count('Rating')
-                        ).order_by('-average_score').filter(categories = categories , is_vegetarian = is_vegetarian)
+                        ).order_by('average_score').filter(categories = categories , is_vegetarian = is_vegetarian)
             for recipe in recipes:
                 recipe.average_score = round(recipe.average_score, 1) if recipe.average_score else None
             serializer = RecipeSerializer(recipes , many=True)
@@ -54,7 +54,7 @@ class RecipeView(APIView):
             recipes = Recipe.objects.annotate(
                         average_score = Avg('Rating__score') or 0,
                         number_of_ratings = Count('Rating')
-                        ).order_by('-average_score').filter(categories = categories).order_by('-recipe_id')
+                        ).order_by('average_score').filter(categories = categories).order_by('average_score')
             for recipe in recipes:
                 recipe.average_score = round(recipe.average_score, 1) if recipe.average_score else None
             serializer = RecipeSerializer(recipes , many=True)
@@ -64,7 +64,7 @@ class RecipeView(APIView):
             recipes = Recipe.objects.annotate(
                         average_score = Avg('Rating__score') or 0,
                         number_of_ratings = Count('Rating')
-                        ).order_by('-recipe_id').filter(is_vegetarian=is_vegetarian).order_by('-average_score')
+                        ).order_by('-recipe_id').filter(is_vegetarian=is_vegetarian).order_by('average_score')
             for recipe in recipes:
                 recipe.average_score = round(recipe.average_score, 1) if recipe.average_score else None
             serializer = RecipeSerializer(recipes , many=True)
@@ -72,9 +72,7 @@ class RecipeView(APIView):
         
         recipes = Recipe.objects.annotate(
             average_score = Avg('Rating__score') or 0,
-            number_of_ratings = Count('Rating')
-            
-        ).order_by('-average_score')
+            number_of_ratings = Count('Rating')).order_by('average_score' , '-recipe_id')
         for recipe in recipes:
             recipe.average_score = round(recipe.average_score, 1) if recipe.average_score else None
             
@@ -89,7 +87,7 @@ class RecipeView(APIView):
         if recipe.is_valid():
             recipe.save()
             return Response({'message' : 'Success'})
-        return Response({'message' : 'Error'})
+        return Response(recipe.errors)
 
 class IngredientView(APIView):
     def get(self,request,recipe):

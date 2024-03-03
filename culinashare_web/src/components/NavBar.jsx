@@ -80,9 +80,7 @@ const NavBar = () => {
                 {user ? <>
 
                       <p className='font-poppins text-md md:text-xl font-semibold text-orange-600'>{user.userName}</p>
-                      {!isMobileScreen &&
-                      <UserIcon className="h-5 w-5 md:h-7 md:w-7  text-white font-bold" />
-                    }
+                      
                       <button onClick={() => setIsSideBarOpen(!isSideBarOpen)}>
                         <Bars3BottomRightIcon   className="h-10 w-8 text-white font-bold" />
                       </button>
@@ -108,7 +106,7 @@ const NavBar = () => {
         
 
     </div>
-    <SideBar isSideBarOpen={isSideBarOpen}/>
+    <SideBar isSideBarOpen={isSideBarOpen} setIsSideBarOpen={setIsSideBarOpen}  />
     <Modal isOpen={isModalOpen} openPage={openPage} setOpenPage={setOpenPage}  onClose={modalClose}/>
     </>
   )
