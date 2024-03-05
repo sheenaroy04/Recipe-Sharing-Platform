@@ -141,11 +141,11 @@ ROOT_URLCONF = 'culinashare_backend.urls'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-    'default':  env.db("DATABASE_URL" , default="postgres://default:pn7ulSrDVve3@ep-spring-snowflake-a4az8xjx.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require")
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+    # 'default':  env.db("DATABASE_URL" , default="postgres://default:pn7ulSrDVve3@ep-spring-snowflake-a4az8xjx.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require")
 }
 
 CORS_ORIGIN_WHITELIST = [
