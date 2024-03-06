@@ -10,6 +10,7 @@ const PostRecipe = () => {
   const[isVegetarian , setIsVegetarian] = useState(false);
   const[preparationTime , setPreparationTime] = useState(null);
   const[servings , setServings] = useState(0);
+  const[ingredients , setIngredients] = useState([]);
 
   const[categories , setCategories] = useState([]);
   const backendUrl = process.env.REACT_APP_BASE_API_URL;
@@ -33,10 +34,10 @@ const PostRecipe = () => {
     <div className='mt-20 p-8 bg-white/80 grid grid-cols-2  backdrop-blur-md shadow-md h-[80%] w-[80%] rounded-lg '>
         <div className='flex flex-col items-center justify-center'>
           <input type="file" alt='Img' hidden id='image' />
-          <div className='h-1/3 w-1/2 border-2 flex items-center justify-center border-orange-500 border-dashed'>
-            <button onClick={()=>{
+          <div onClick={()=>{
               document.getElementById('image').click();
-            }}>Select your recipe image</button>
+            }} className='h-1/3 w-1/2 border-2 flex items-center justify-center border-orange-500 border-dashed'>
+            <button>Select your recipe image</button>
           </div>
         </div>
 
@@ -75,7 +76,7 @@ const PostRecipe = () => {
               <div className='flex flex-col gap-2 items-center justify-center'>
                 <p>Preparation Time</p>
                 <div className='flex flex-row items-center gap-2'>
-                  <input type="number"  className='bg-[#F0F8FF] p-2 backdrop-blur-md shadow-md outline-none w-20' />
+                  <input type="number" value={preparationTime} onChange={(e) => setPreparationTime(e.target.value)}  className='bg-[#F0F8FF] p-2 backdrop-blur-md shadow-md outline-none w-20' />
                   <p>mins</p>
                 </div>
               </div>
@@ -100,12 +101,22 @@ const PostRecipe = () => {
   const StepTwo = () =>{
     return(
     <div className='mt-20 p-8 bg-white/80 grid grid-cols-2  backdrop-blur-md shadow-md h-[80%] w-[80%] rounded-lg '>
-        <div className='flex flex-col items-center justify-center'>
-          
+        <div className='flex flex-col items-center '>
+          <textarea rows={10}  type="text" placeholder='Describe the procedure for the recipe...' 
+                            className='bg-[#F0F8FF] p-2 w-[90%] outline-none overflow-hidden 
+                            backdrop-blur-md shadow-md  placeholder:text-black' 
+                            value={procedure} onChange={(e) => setProcedure(e.target.value)} />
         </div>
 
         <div className='p-2 gap-4 flex flex-col font-poppins '>
-          
+          <p>Ingredients</p>
+          <div className='w-full'>
+            <div className='flex flex-row w-full gap-5 items-center'>
+              <input type="text" placeholder='Ingredient' className='bg-[#F0F8FF] p-2 w-[60%] outline-none overflow-hidden  backdrop-blur-md shadow-md'  />
+              <input type="text" placeholder='Quantity' className='bg-[#F0F8FF] p-2 w-[20%] outline-none overflow-hidden  backdrop-blur-md shadow-md'  />
+              <PlusCircleIcon  className="h-6 w-6 text-slate-600" />
+            </div>
+          </div>
           <button onClick={()=>setCurrentPage(1)} className='w-full p-2 text-white text-lg bg-slate-600 my-4'>Back</button>
         </div>
       </div>
