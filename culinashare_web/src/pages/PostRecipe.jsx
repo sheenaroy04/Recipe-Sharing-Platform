@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { PlusCircleIcon ,MinusCircleIcon } from "@heroicons/react/20/solid";
 
 const PostRecipe = () => {
+  const[currentPage , setCurrentPage] = useState(1);
   const[title,setTitle] = useState('');
   const[description , setDescription] = useState('');
   const[procedure , setProcedure] = useState('');
-  const[categories , setCategories] = useState([]);
   const[categoryId , setCategoryId] = useState(null);
   const[isVegetarian , setIsVegetarian] = useState(false);
+  const[preparationTime , setPreparationTime] = useState(null);
+  const[servings , setServings] = useState(0);
+
+  const[categories , setCategories] = useState([]);
   const backendUrl = process.env.REACT_APP_BASE_API_URL;
 
   const fetchCategories = async() =>{
@@ -36,25 +40,28 @@ const PostRecipe = () => {
           </div>
         </div>
 
-        <div className='p-2 gap-4 flex flex-col font-poppins'>
+        <div className='p-2 gap-4 flex flex-col font-poppins '>
           <input type="text" placeholder='Recipe Name' 
                             className='bg-[#F0F8FF] p-2 w-full outline-none 
                             backdrop-blur-md shadow-md  placeholder:text-black' 
                             value={title} onChange={(e) => setTitle(e.target.value)} />
-          <textarea rows={5}  type="text" placeholder='Description' 
-                            className='bg-[#F0F8FF] p-2 w-full outline-none overflow-hidden 
-                            backdrop-blur-md shadow-md  placeholder:text-black' 
-                            value={description} onChange={(e) => setDescription(e.target.value)} />
+
           <select name="Category" value={categoryId} onChange={(e)=> setCategoryId(e.target.value)}
                   className='outline-none bg-[#F0F8FF] p-2 backdrop-blur-md shadow-md'
                               >
-            <option value="" disabled>-- Select a category --</option>
+            <option value="" disabled={categoryId!==null}>-- Select a category --</option>
             {categories.map((item,index) => (
               <option  value={item.id}>
                 {item.name}
                 </option>
             ))}
           </select>
+
+          <textarea rows={5}  type="text" placeholder='Description' 
+                            className='bg-[#F0F8FF] p-2 w-full outline-none overflow-hidden 
+                            backdrop-blur-md shadow-md  placeholder:text-black' 
+                            value={description} onChange={(e) => setDescription(e.target.value)} />
+          
           
           <p>Dietary</p>
           <div className='flex flex-row gap-2'>
@@ -76,21 +83,46 @@ const PostRecipe = () => {
               <div className='flex flex-col gap-2 items-center justify-center'>
                 <p>Servings</p>
                 <div className='flex flex-row items-center gap-2'>
-                  <MinusCircleIcon className="h-6 w-6 text-slate-600" />
-                  <input type="number"  className='bg-[#F0F8FF] p-2 backdrop-blur-md shadow-md outline-none w-20' />
-                  <PlusCircleIcon className="h-6 w-6 text-slate-600" />
+                  <MinusCircleIcon onClick={()=>servings !==0 && setServings(servings-1)} className="h-6 w-6 text-slate-600" />
+                  <input type="number" value={servings}  className='bg-[#F0F8FF] p-2 text-center backdrop-blur-md shadow-md outline-none w-20' />
+                  <PlusCircleIcon onClick={() => setServings(servings+1)} className="h-6 w-6 text-slate-600" />
                 </div>
               </div>
               
           </div>
+
+          <button onClick={()=>setCurrentPage(2)} className='w-full p-2 text-white text-lg bg-slate-600 my-4'>Next</button>
+        </div>
+      </div>
+      )
+  }
+
+  const StepTwo = () =>{
+    return(
+    <div className='mt-20 p-8 bg-white/80 grid grid-cols-2  backdrop-blur-md shadow-md h-[80%] w-[80%] rounded-lg '>
+        <div className='flex flex-col items-center justify-center'>
+          
+        </div>
+
+        <div className='p-2 gap-4 flex flex-col font-poppins '>
+          
+          <button onClick={()=>setCurrentPage(1)} className='w-full p-2 text-white text-lg bg-slate-600 my-4'>Back</button>
         </div>
       </div>
       )
   }
 
   return (
-    <div className='h-[100vh] w-[100vw] flex  justify-center'>
-      <StepOne/>
+    <div className='h-[100vh] w-[100vw] flex flex-col items-center  justify-center p-8'>
+      <div className='flex flex-row items-center justify-center gap-6 mt-10'>
+        <button className={`px-4 py-1 rounded-lg text-xl font-poppins   ${currentPage>0 &&'bg-orange-600 text-white'}  `}>1</button>
+        <button className={`px-4 py-1 rounded-lg text-xl font-poppins   ${currentPage>1 &&'bg-orange-600 text-white' }`}>2</button>
+      </div>
+      {currentPage === 1 ?
+        <StepOne/>:
+        <StepTwo/>
+    }
+      
     </div>
   )
 }
