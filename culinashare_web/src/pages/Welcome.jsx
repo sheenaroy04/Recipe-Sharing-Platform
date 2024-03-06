@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal';
 import { DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
 import CategoryLoader from '../components/WelcomeComponents/CategoryLoader';
+import Loading from '../components/Loading';
 
 const Welcome = () => {
   const backendUrl = process.env.REACT_APP_BASE_API_URL;
@@ -31,7 +32,8 @@ const Welcome = () => {
   const[openPage , setOpenPage] = useState('');
   const[showCategoriesInSelect , setShowCategoriesInSelect] = useState(false);
   
-
+  const[showLoading , ssetShowLoading] = useState(false);
+  const[message , setMessage] = useState('');
 
   const pageNumbers = []
 
@@ -90,7 +92,14 @@ const Welcome = () => {
 
   const newRecipeShareNavigation =() =>{
     if(user){
-      navigate('/post-recipe');
+      ssetShowLoading(true);
+      setMessage('Share your recipes...');
+      setTimeout(()=>{
+        ssetShowLoading(false);
+        setMessage('');
+        navigate('/post-recipe');
+      },4000);
+      
     }
     else{
       setIsModalOpen(true);
@@ -146,7 +155,7 @@ const Welcome = () => {
   return (
     <div>
       <Modal isOpen={isModalOpen} openPage={openPage} setOpenPage={setOpenPage} onClose={modalClose}  />
-      
+      <Loading showLoading={showLoading} message={message}/>
         <div className='welcome flex flex-col items-center justify-center'>
           <div className='bg-slate-800/60 py-12  w-full flex items-center justify-center flex-col gap-6 text-white
                   

@@ -23,9 +23,12 @@ const IngredientSttore = ({ingredients,setIngredients}) => {
         else{
             const newIngredient = {
                 "ingredient_name" : ingredientName,
-                "quantity" : quantity
+                "quantity" : quantity,
+                "recipe" : 0
             }
             setIngredients([  newIngredient , ...ingredients])
+            setIngredientName('');
+            setQuantity('')
         }
         
     }

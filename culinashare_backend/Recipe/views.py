@@ -86,7 +86,8 @@ class RecipeView(APIView):
         recipe = RecipeSerializer(data=request.data)
         if recipe.is_valid():
             recipe.save()
-            return Response({'message' : 'Success'})
+            return Response({'message' : 'Success',
+                             'data': recipe.data})
         return Response(recipe.errors)
 
 class IngredientView(APIView):
@@ -94,6 +95,10 @@ class IngredientView(APIView):
         response = Ingredient.objects.filter(recipe=recipe)
         serializer = IngredientSerializer(response , many=True)
         return Response(serializer.data)
+    def post(self,request):
+        ingredients = IngredientSerializer(data=request.data)
+        print(ingredients)
+        return Response({'message':'OK'})
 
 class RatingView(APIView):
     def get(self,request,recipe=None):
