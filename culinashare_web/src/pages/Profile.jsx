@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { EnvelopeIcon ,PencilIcon } from "@heroicons/react/24/outline";
 import { BookmarkIcon } from "@heroicons/react/16/solid";
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 // import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { StarIcon } from "@heroicons/react/20/solid";
+import DeleteWarning from '../components/DeleteWarning';
 
 const Profile = () => {
   const user = useSelector(state => state.user);
@@ -16,6 +17,11 @@ const Profile = () => {
 
   const[username , setUserName] = useState('');
   const[email,setEmail] = useState('');
+
+  const[showWarning,setShowWarning]=useState(false);
+  const[idToDelete , setIdToDelete] = useState(null);
+  const[recipeName,setRecipeName]=useState('');
+
   const getProfileDetails = async() =>{
     try {
       const getUserProfile = await fetch(`${backendUrl}/food/recipies/author=${userId}`);
@@ -44,14 +50,48 @@ const Profile = () => {
   },[])
 
   const RecipeCard = ({post}) =>{
+    const[showOptions , setShowOptions] = useState(false);
+    const[copyToClipBoard,setCopyToClipBoard] = useState(false);
+    
 
+    const copyUrl = async() =>{
+      try {
+        await navigator.clipboard.writeText(`http://localhost:3000/recipe/${post.recipe_id}`);
+        setCopyToClipBoard(true);
+        setTimeout(()=>{
+          setCopyToClipBoard(false);
+        },4000)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    const deleteWarn = () =>{
+     
+      setIdToDelete(post.recipe_id);
+      setRecipeName(post.title);
+      setShowWarning(true);
+    }
 
     return(
       <div className='w-full h-[30vh] bg-orange-600 backdrop-blur-md shadow-md'>
 
-                {parseInt(userId) === user.userId &&
-                <InformationCircleIcon className="h-6 w-6 text-black cursor-pointer  absolute right-2 top-2" />
+                
+                <div className=' absolute right-2 top-2'>
+                  <InformationCircleIcon id='dropdown' onClick={()=>setShowOptions(!showOptions)} className="h-6 w-6 text-black cursor-pointer " />
+                  {showOptions &&
+                  <div className='bg-white absolute right-2 w-20 rounded-md'>
+                    <Link to={`/recipe/${post.recipe_id}`} >
+                      <button className='px-2 py-1 hover:bg-slate-600 hover:text-white cursor-pointer text-left rounded-md w-full'>View</button>
+                    </Link>
+                    <button onClick={copyUrl} className='px-2 py-1 hover:bg-slate-600 hover:text-white cursor-pointer text-left rounded-md w-full'>{copyToClipBoard ? 'Copied':'Copy link'}</button>
+                      {parseInt(userId) === user.userId &&
+                    <button onClick={deleteWarn} className='px-2 py-1 hover:bg-slate-600 hover:text-white cursor-pointer w-full text-left rounded-md'>Delete</button>
                   }
+                  </div>
+                  }
+                </div>
+                
+                  
                 {/* <EllipsisVerticalIcon className="h-8 w-8 p-1 bg-white rounded-full text-black absolute right-2 top-2" /> */}
 
                 <div className="h-3/4 w-full">
@@ -71,6 +111,7 @@ const Profile = () => {
 
   return (
     <div className='w-full min-h-[100vh] flex items-center justify-center '>
+      <DeleteWarning showWarning={showWarning} setShowWarning={setShowWarning} recipe_id={idToDelete} name={recipeName} />
       <div className='md:w-[90%] p-8 w-full min-h-[90vh] flex flex-col items-center backdrop-blur-md shadow-xl rounded-lg mt-16  bg-white/80'>
       {parseInt(userId) === user.userId &&
         <div className='flex flex-row items-end justify-end w-full'>

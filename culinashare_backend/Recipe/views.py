@@ -89,6 +89,13 @@ class RecipeView(APIView):
             return Response({'message' : 'Success',
                              'data': recipe.data})
         return Response(recipe.errors)
+    def delete(self,request,recipe_id):
+        recipe = Recipe.objects.get(recipe_id=recipe_id)
+        try:
+            recipe.delete()
+            return Response({'message':'Deleted successfully'})
+        except Recipe.DoesNotExist:
+            return Response({'error' :'Recipe Not Found'})
 
 class IngredientView(APIView):
     def get(self,request,recipe=None):
