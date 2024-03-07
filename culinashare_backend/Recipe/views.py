@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Category , Recipe , Ingredient , Rating
 from .serializers import CategorySerializer , RecipeSerializer , IngredientSerializer , RatingSerializer
-
+import json
 
 
 class CategoryView(APIView):
@@ -91,14 +91,30 @@ class RecipeView(APIView):
         return Response(recipe.errors)
 
 class IngredientView(APIView):
-    def get(self,request,recipe):
-        response = Ingredient.objects.filter(recipe=recipe)
+    def get(self,request,recipe=None):
+        if recipe is not None:
+            response = Ingredient.objects.filter(recipe=recipe)
+            serializer = IngredientSerializer(response , many=True)
+            return Response(serializer.data)
+        response = Ingredient.objects.all()
         serializer = IngredientSerializer(response , many=True)
         return Response(serializer.data)
-    def post(self,request):
-        ingredients = IngredientSerializer(data=request.data)
-        print(ingredients)
-        return Response({'message':'OK'})
+    
+    def post(self, request, format=None):
+        ingredients_data = request.data
+        errors = []
+        for ingredient_data in ingredients_data:
+            
+            serializer = IngredientSerializer(data=ingredient_data)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                errors.append(serializer.errors)
+        if errors:
+            return Response({"errors": errors}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"message": "Recipe posted successfully"}, status=status.HTTP_201_CREATED)
+
 
 class RatingView(APIView):
     def get(self,request,recipe=None):

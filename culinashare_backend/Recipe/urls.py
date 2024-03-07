@@ -15,7 +15,7 @@ urlpatterns = [
     path('recipies/<int:categories>/non-vegetarian' , RecipeView.as_view() ,{'is_vegetarian' : False}, name="Recipe By Category - Non Vegetarian"),
     
     path('ingredients/recipe=<int:recipe>' ,IngredientView.as_view() , name='Ingredients' ),
-    
+    path('ingredients/' , IngredientView.as_view() , name='Ingredients Post'),
     path('ratings/' , RatingView.as_view() , name='Rating' ),
     path('ratings/<int:recipe>' , RatingView.as_view() , name='Recipe Rating' )
 ] 

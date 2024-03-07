@@ -7,7 +7,7 @@ const StepOne = ({title,image,categoryId,description,isVegetarian,preparationTim
     <div className='p-2 flex flex-col gap-4 md:p-4 bg-white/80 md:grid md:grid-cols-2  backdrop-blur-md shadow-md w-[95%]  rounded-lg '>
         <div className='flex flex-col items-center justify-center m-4'>
           {image ? <>
-            <img className='h-[70vh] w-full' src={image && URL.createObjectURL(image)} alt="" />
+            <img className='h-[30vh]  w-full lg:w-[70%]' src={image && URL.createObjectURL(image)} alt="" />
           </>:
           <>
           <input type="file" alt='Img' hidden onChange={(e) => setImage(e.target.files[0])} id='image' />
@@ -33,7 +33,7 @@ const StepOne = ({title,image,categoryId,description,isVegetarian,preparationTim
                               >
             <option value="" disabled={categoryId!==null}>-- Select a category --</option>
             {categories.map((item,index) => (
-              <option  value={item.id}>
+              <option key={index}  value={item.id}>
                 {item.name}
                 </option>
             ))}

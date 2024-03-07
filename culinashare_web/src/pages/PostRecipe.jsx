@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { PlusCircleIcon ,MinusCircleIcon } from "@heroicons/react/20/solid";
-import IngredientSttore from '../components/PostRecipeComponents/IngredientSttore';
 import { useSelector } from 'react-redux';
 import StepOne from '../components/PostRecipeComponents/StepOne';
 import StepTwo from '../components/PostRecipeComponents/StepTwo';
+import Loading from '../components/Loading';
+import { useNavigate } from 'react-router-dom';
 
 const PostRecipe = () => {
+  const navigate = useNavigate();
   const user = useSelector(state => state.user)
   const[currentPage , setCurrentPage] = useState(1);
   const[title,setTitle] = useState('');
   const[image,setImage] = useState(null);
   const[description , setDescription] = useState('');
   const[procedure , setProcedure] = useState('');
-  const[categoryId , setCategoryId] = useState(0);
+  const[categoryId , setCategoryId] = useState(null);
   const[isVegetarian , setIsVegetarian] = useState(true);
   const[preparationTime , setPreparationTime] = useState(null);
   const[servings , setServings] = useState(0);
@@ -22,6 +23,9 @@ const PostRecipe = () => {
 
   const[categories , setCategories] = useState([]);
   const backendUrl = process.env.REACT_APP_BASE_API_URL;
+
+  const[showLoading , setShowLoading] = useState(false);
+  const[message,setMessage] = useState('');
 
   const fetchCategories = async() =>{
     try {
@@ -43,56 +47,60 @@ const PostRecipe = () => {
     formData.append('servings', servings);
     formData.append('image',image);
     formData.append('author',user.userId);
-    formData.append('categories',[parseInt(categoryId)+1])
+    formData.append('categories',[parseInt(categoryId)])
     try {
       const uploadPost =  await fetch(`${backendUrl}/food/recipies/`,{
         method:'POST',
+        // headers: {
+        //   'Content-Type': 'application/json', 
+        // },
         body:formData
       });
       const response = await uploadPost.json();
-      setRecipeId(response.data.recipe_id);
       console.log(response)
-      // uploadIngredients();
+      const newRecipeId = response.data.recipe_id;
+    await setRecipeId(newRecipeId);
+    postIngredients(newRecipeId, ingredients);
 
-      const ingredientList = ingredients.map((ingredient)=>{
-        return{
-          ...ingredient,
-          recipe:recipeId
-        }
-      });
-      console.log(ingredientList)
-
-      const list = {
-        data : ingredientList
-      }
-      
-        const uploadIngred = await fetch(`${backendUrl}/food/ingredients/`,{
-          method:'POST',
-          body:JSON.stringify(list)
-        });
-        const response2 = uploadIngred.json();
-        console.log(response2);
-        console.log('Hellp')
-      
+             
     } catch (error) {
       console.error(error)
     }
   }
 
-  const uploadIngredients = async() =>{
-    const ingredientList = ingredients.map((ingredient)=>ingredient.recipe === recipeId);
+  const postIngredients = async (recipeId, ingredients) => {
+    const ingredientList = ingredients.map((ingredient) => ({
+        ...ingredient,
+        recipe: recipeId
+    }));
 
     try {
-      const uploadIngred = await fetch(`${backendUrl}/food/ingredients/`,{
-        method:'POST',
-        body:ingredientList.json()
-      });
-      const response = uploadIngred.json();
-      console.log(response);
+        const uploadIngred = await fetch(`${backendUrl}/food/ingredients/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(ingredientList)
+        });
+
+        const response = await uploadIngred.json();
+
+        if (!uploadIngred.ok) {
+            console.log(response.errors);
+        } else {
+            setMessage(response.message);
+            setShowLoading(true);
+            setTimeout(() => {
+                setShowLoading(false);
+                navigate('/');
+                setMessage('');
+            }, 4000)
+        }
     } catch (error) {
-      
+        console.error(error);
     }
-  }
+}
+
 
   useEffect(() => {
     fetchCategories();
@@ -101,13 +109,14 @@ const PostRecipe = () => {
 
   return (
     <div className=' w-[100vw] flex flex-col items-center  justify-center p-2 mt-16 md:p-8'>
+      <Loading showLoading={showLoading} message={message}/>
       <div className='flex flex-row items-center justify-center gap-6 my-6'>
         <button className={`px-4 py-1 rounded-lg text-xl font-poppins   ${currentPage>0 &&'bg-orange-600 text-white'}  `}>1</button>
         <button className={`px-4 py-1 rounded-lg text-xl font-poppins   ${currentPage>1 &&'bg-orange-600 text-white' }`}>2</button>
       </div>
       {currentPage === 1 ?
 
-        <StepOne title={title} setTitle={setTitle} categories={categories} categoryId={categories} setCategoryId={setCategoryId} description={description}
+        <StepOne title={title} setTitle={setTitle} categories={categories} categoryId={categoryId} setCategoryId={setCategoryId} description={description}
            setDescription={setDescription} servings={servings} setServings={setServings} image={image} setImage={setImage}
            currentPage={currentPage} setCurrentPage={setCurrentPage} isVegetarian={isVegetarian} setIsVegetarian={setIsVegetarian}
            preparationTime={preparationTime} setPreparationTime={setPreparationTime} />
