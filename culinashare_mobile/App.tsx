@@ -2,6 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import React from 'react';
+import Navigation from './Navigation';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -20,10 +22,7 @@ const App : React.FC = () => {
   },[])
 
   return (
-    <View tw='flex-1 items-center justify-center'>
-      <Text tw='text-center'>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Navigation/>
   );
 }
 
