@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import Category , Recipe , Ingredient , Rating
-
+from .models import Category , Recipe , Ingredient , Rating , Bookmark
+from rest_framework.exceptions import ValidationError
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,3 +35,9 @@ class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = '__all__'
+        
+class BookmarkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bookmark
+        fields  = '__all__'
+        

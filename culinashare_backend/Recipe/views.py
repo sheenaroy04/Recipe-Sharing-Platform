@@ -3,8 +3,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Category , Recipe , Ingredient , Rating
-from .serializers import CategorySerializer , RecipeSerializer , IngredientSerializer , RatingSerializer
+from .models import Category , Recipe , Ingredient , Rating , Bookmark
+from .serializers import CategorySerializer , RecipeSerializer , IngredientSerializer , RatingSerializer , BookmarkSerializer
 import json
 
 
@@ -145,4 +145,19 @@ class RatingView(APIView):
             ratingsData.save()
             return Response({'message' : 'Your feedback is posted'} , status=status.HTTP_201_CREATED)
         return Response({'error' : 'Error while posting comment'})
+    
+class BookmarkView(APIView):
+    
+    def post(self,request):
+        serializer = BookmarkSerializer(data=request.data)
+        user = request.data.get('user')
+        recipe = request.data.get('user')
+        response = Bookmark.objects.filter(user=user , recipe=recipe).first()
+        if response is not None:
+            response.delete()
+            return Response({'ddel':'del'})
+        elif serializer.is_valid():
+            serializer.save()
+            return Response({'data':'Saved'})
+        
     

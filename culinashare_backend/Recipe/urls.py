@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CategoryView , RecipeView , IngredientView , RatingView
+from .views import CategoryView , RecipeView , IngredientView , RatingView,BookmarkView
 
 urlpatterns = [
     path('categories/',CategoryView.as_view() , name="Categories"),
@@ -17,7 +17,9 @@ urlpatterns = [
     path('ingredients/recipe=<int:recipe>' ,IngredientView.as_view() , name='Ingredients' ),
     path('ingredients/' , IngredientView.as_view() , name='Ingredients Post'),
     path('ratings/' , RatingView.as_view() , name='Rating' ),
-    path('ratings/<int:recipe>' , RatingView.as_view() , name='Recipe Rating' )
+    path('ratings/<int:recipe>' , RatingView.as_view() , name='Recipe Rating' ),
+    
+    path('bookmarks/' , BookmarkView.as_view() , name='Bookmarks')
 ] 
 
 

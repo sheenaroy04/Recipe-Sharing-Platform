@@ -53,3 +53,14 @@ class Rating(models.Model):
     
     def __str__(self):
         return f"{self.score} by {self.user} for {self.recipe.title}"
+
+class Bookmark(models.Model):
+    user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='bookmarks')
+    recipe = models.ForeignKey(Recipe ,on_delete=models.CASCADE , related_name='bookmarked_by')
+    
+  
+        
+    def __str__(self):
+        return f"{self.user.username} bookmarked {self.recipe.title}"
+        
+    
