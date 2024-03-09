@@ -19,7 +19,10 @@ urlpatterns = [
     path('ratings/' , RatingView.as_view() , name='Rating' ),
     path('ratings/<int:recipe>' , RatingView.as_view() , name='Recipe Rating' ),
     
-    path('bookmarks/' , BookmarkView.as_view() , name='Bookmarks')
+    path('bookmarks/' , BookmarkView.as_view() , name='Bookmarks'),
+    path('bookmarks/<int:user>' , BookmarkView.as_view() , name='Bookmarks by user'),
+    
+    path('recipies/viewer=<int:viewer>' , RecipeView.as_view() , name="Recipe By Author"),
 ] 
 
 

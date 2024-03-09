@@ -21,6 +21,7 @@ const Profile = () => {
   const[showWarning,setShowWarning]=useState(false);
   const[idToDelete , setIdToDelete] = useState(null);
   const[recipeName,setRecipeName]=useState('');
+  const[isPostView , setIsPostView] = useState(true);
 
   const getProfileDetails = async() =>{
     try {
@@ -142,16 +143,23 @@ const Profile = () => {
           </div>
 
           <div className={`w-full ${parseInt(userId) === user.userId && 'grid grid-cols-2 gap-4'}  my-8`}>
-            <button className='w-full text-2xl p-4 border-b-4 border-slate-600'>Posts</button>
+            <button onClick={()=>setIsPostView(true)} className={`w-full text-2xl p-4 border-b-4  ${isPostView ?'border-slate-600':'border-transparent' } `}>Posts</button>
             {parseInt(userId) === user.userId &&
-            <button className='w-full text-2xl p-4'>Saved</button>
+            <button onClick={()=>setIsPostView(false)} className={`w-full text-2xl p-4 border-b-4  ${!isPostView ? 'border-slate-600':'border-transparent' }`}>Saved</button>
           }
           </div>
           
-          <div className='w-[75%] grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-2'>
+          <div className='w-full md:w-[75%] grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-2'>
+            {isPostView ?
+            <>
             {posted.map((post,id) =>(
               <RecipeCard key={id} post={post}/>
             ))}
+            </>
+            
+            :
+            <></>
+          }
           </div>
 
           

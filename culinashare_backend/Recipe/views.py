@@ -1,11 +1,13 @@
-from django.db.models import Avg,Count ,F
-from django.shortcuts import render
+from django.db.models import Avg,Count ,F , Exists , OuterRef
+from django.shortcuts import render , get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Category , Recipe , Ingredient , Rating , Bookmark
 from .serializers import CategorySerializer , RecipeSerializer , IngredientSerializer , RatingSerializer , BookmarkSerializer
 import json
+from django.contrib.auth.models import User
+
 
 
 class CategoryView(APIView):
@@ -20,7 +22,7 @@ class RecipeView(APIView):
         if recipe_id is not None:
             recipes = Recipe.objects.annotate(
                         average_score = Avg('Rating__score') or 0,
-                        number_of_ratings = Count('Rating')
+                        number_of_ratings = Count('Rating'),
                         ).order_by('-recipe_id').get(recipe_id=recipe_id)
             if recipes.average_score is not None:
                 recipes.average_score = round(recipes.average_score, 1)
@@ -31,6 +33,7 @@ class RecipeView(APIView):
             recipes = Recipe.objects.annotate(
                         average_score = Avg('Rating__score') or 0,
                         number_of_ratings = Count('Rating'),
+                        isBookMarked = Exists(Bookmark.objects.filter(user=author , recipe_id = OuterRef('pk')))
                         ).order_by('-recipe_id').filter(author = author)
             for recipe in recipes:
                 recipe.average_score = round(recipe.average_score, 1) if recipe.average_score else None
@@ -70,9 +73,13 @@ class RecipeView(APIView):
             serializer = RecipeSerializer(recipes , many=True)
             return Response(serializer.data)
         
+        user = request.user
         recipes = Recipe.objects.annotate(
             average_score = Avg('Rating__score') or 0,
-            number_of_ratings = Count('Rating')).order_by('-average_score' , '-recipe_id')
+            number_of_ratings = Count('Rating'),
+            isBookMarked = Exists(Bookmark.objects.filter(user=user.id , recipe_id = OuterRef('pk'))
+            )).order_by('-average_score' , '-recipe_id',)
+            
         for recipe in recipes:
             recipe.average_score = round(recipe.average_score, 1) if recipe.average_score else None
             
@@ -147,17 +154,30 @@ class RatingView(APIView):
         return Response({'error' : 'Error while posting comment'})
     
 class BookmarkView(APIView):
+    def get(self,request,user):
+        bookmarks = Bookmark.objects.filter(user=user)
+        serializer = BookmarkSerializer(bookmarks , many=True)
+        return Response(serializer.data)
     
     def post(self,request):
-        serializer = BookmarkSerializer(data=request.data)
-        user = request.data.get('user')
-        recipe = request.data.get('user')
-        response = Bookmark.objects.filter(user=user , recipe=recipe).first()
-        if response is not None:
-            response.delete()
-            return Response({'ddel':'del'})
-        elif serializer.is_valid():
-            serializer.save()
-            return Response({'data':'Saved'})
+        
+        user_id = request.data.get('user')
+        recipe_id = request.data.get('recipe')
+
+        if not user_id or not recipe_id:
+            return Response({'error': 'User and Recipe IDs must be provided.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = get_object_or_404(User, id=user_id)
+        recipe = get_object_or_404(Recipe, recipe_id=recipe_id)
+
+
+        bookmark, created = Bookmark.objects.get_or_create(user=user, recipe=recipe)
+        if not created:
+            bookmark.delete()
+            return Response({'message': 'Bookmark removed'}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            serializer = BookmarkSerializer(bookmark)
+            
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         
     
