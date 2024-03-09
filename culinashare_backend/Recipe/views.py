@@ -7,6 +7,7 @@ from .models import Category , Recipe , Ingredient , Rating , Bookmark
 from .serializers import CategorySerializer , RecipeSerializer , IngredientSerializer , RatingSerializer , BookmarkSerializer
 import json
 from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated
 
 
 
@@ -18,6 +19,7 @@ class CategoryView(APIView):
         return Response(serializer.data)
     
 class RecipeView(APIView):
+    # permission_classes = [IsAuthenticated]
     def get(self,request,recipe_id=None,categories = None , is_vegetarian=None , author=None):
         if recipe_id is not None:
             recipes = Recipe.objects.annotate(
@@ -74,11 +76,19 @@ class RecipeView(APIView):
             return Response(serializer.data)
         
         user = request.user
+        
         recipes = Recipe.objects.annotate(
             average_score = Avg('Rating__score') or 0,
             number_of_ratings = Count('Rating'),
-            isBookMarked = Exists(Bookmark.objects.filter(user=user.id , recipe_id = OuterRef('pk'))
-            )).order_by('-average_score' , '-recipe_id',)
+            
+            ).order_by('-average_score' , '-recipe_id',)
+        
+        if request.user.is_authenticated:
+            recipes = recipes.annotate(
+                isBookMarked=Exists(
+                    Bookmark.objects.filter(user=user, recipe_id=OuterRef('pk'))
+                )
+            )
             
         for recipe in recipes:
             recipe.average_score = round(recipe.average_score, 1) if recipe.average_score else None
