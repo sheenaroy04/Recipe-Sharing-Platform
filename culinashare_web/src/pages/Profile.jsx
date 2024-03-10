@@ -7,6 +7,7 @@ import { Link, useParams } from 'react-router-dom';
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { StarIcon } from "@heroicons/react/20/solid";
 import DeleteWarning from '../components/DeleteWarning';
+import { refreshAccessToken } from '../redux/refreshAccessToken';
 
 const Profile = () => {
   const user = useSelector(state => state.user);
@@ -22,6 +23,8 @@ const Profile = () => {
   const[idToDelete , setIdToDelete] = useState(null);
   const[recipeName,setRecipeName]=useState('');
   const[isPostView , setIsPostView] = useState(true);
+  let token = localStorage.getItem('access_token');
+  const[bookmark,setBookmark] = useState([]);
 
   const getProfileDetails = async() =>{
     try {
@@ -45,9 +48,53 @@ const Profile = () => {
     }
   }
 
+  const bookmarks = async() => {
+    let token = localStorage.getItem('access_token');
+  
+    const fetchBookmarks = async (retry = false) => {
+      try {
+        const response = await fetch(`${backendUrl}/food/recipies/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+  
+        if (!response.ok) {
+
+          if (response.status === 401 && !retry) {
+            const refreshed = await refreshAccessToken(); 
+            token = localStorage.getItem('access_token');
+            if (refreshed) {
+              return fetchBookmarks(true); 
+            } else {
+              throw new Error('Unable to refresh token');
+            }
+          } else {
+            console.log(response.status);
+            throw new Error('Request failed with status ' + response.status);
+          }
+        }
+  
+        const data = await response.json();
+        const filteredBookmarks = data.filter(item => item.isBookMarked === true);
+        setBookmark(filteredBookmarks);
+        
+      } catch (error) {
+        console.error('Failed to fetch bookmarks:', error);
+      }
+    };
+  
+    await fetchBookmarks();
+  }
+
+  
+
   useEffect(() => {
     getProfileDetails();
     getUserInfo();
+    bookmarks();
   },[])
 
   const RecipeCard = ({post}) =>{
@@ -158,7 +205,12 @@ const Profile = () => {
             </>
             
             :
-            <></>
+            <>
+            {bookmark.map((item,index) =>(
+              <RecipeCard key={index} post={item}/>
+            ))}
+            
+            </>
           }
           </div>
 

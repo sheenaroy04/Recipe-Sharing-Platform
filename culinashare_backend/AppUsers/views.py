@@ -43,7 +43,7 @@ class LoginView(APIView):
             access_token['username'] = user.username
             return Response({
                 'access_token' : str(access_token) , 
-                'refresh-token': str(refresh_token),
+                'refresh_token': str(refresh_token),
                 'message' : 'Logged in Successfully'
                 },status = status.HTTP_200_OK)
 

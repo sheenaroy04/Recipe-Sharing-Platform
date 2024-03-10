@@ -25,21 +25,7 @@ const RecipeCard = ({currentItems , categories , users , recipeLoading}) =>{
 
   }
 
-  
-  // useEffect(() => {
-  //   const checkIfVisible = () =>{
-  //     const divElement = document.getElementById('recipeDiv');
-  //     if(divElement){
-  //       const rect = divElement.getBoundingClientRect();
-  //       const isVisible = rect.top <= window.innerHeight  ;
-  //       setIsRecipeVisible(isVisible);
-  //     }
-          
-      
-  //   }
-  //   window.addEventListener('scroll' , checkIfVisible);
-  //   return () => window.removeEventListener('scroll' , checkIfVisible);
-  // },[])
+
   
 
     const imageAPIUrl = process.env.REACT_APP_IMAGE_URL;

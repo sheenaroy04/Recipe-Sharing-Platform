@@ -42,6 +42,7 @@ const Login = () => {
           userName : jwtDecode(responseData.access_token).username
         }
         localStorage.setItem('access_token' , responseData.access_token);
+        localStorage.setItem('refresh_token' ,responseData.refresh_token );
         dispatch(setUser(user));
         setTimeout(() =>{
           setResponseMessage('');

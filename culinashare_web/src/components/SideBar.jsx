@@ -17,6 +17,7 @@ const SideBar = ({isSideBarOpen , setIsSideBarOpen}) => {
 
   const logout = () => {
     localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token')
     navigate('/')
     window.location.reload();
     
