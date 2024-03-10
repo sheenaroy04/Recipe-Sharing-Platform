@@ -9,7 +9,7 @@ interface FrameProps {
 
 const Frame: React.FC<FrameProps> = ({ children }) => {
   return (
-    <SafeAreaView tw='flex-1 items-center justify-center bg-blue-500'>
+    <SafeAreaView tw='flex-1 items-center justify-center bg-slate-800'>
         <ScrollView tw='flex-1'>
             {children}
         </ScrollView>
