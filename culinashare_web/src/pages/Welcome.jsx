@@ -9,6 +9,8 @@ import Modal from '../components/Modal';
 import { DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
 import CategoryLoader from '../components/WelcomeComponents/CategoryLoader';
 import Loading from '../components/Loading';
+import { refreshAccessToken } from '../redux/refreshAccessToken';
+
 
 const Welcome = () => {
   const backendUrl = process.env.REACT_APP_BASE_API_URL;
@@ -41,31 +43,55 @@ const Welcome = () => {
     pageNumbers.push(i);
   }
 
-  const recipeList =async () =>{
+  const recipeList = async () => {
     setLoading(true);
     let recipeUrl = `${backendUrl}/food/recipies/`;
-
-    if(activeCategory !== '' && dietary !== ""){
+  
+    if (activeCategory !== '' && dietary !== "") {
       recipeUrl += `${activeCategory}/`;
-      recipeUrl += dietary === 'true'? 'vegetarian' :  'non-vegetarian'
+      recipeUrl += dietary === 'true' ? 'vegetarian' : 'non-vegetarian';
+    } else if (activeCategory !== '') {
+      recipeUrl += `category=${activeCategory}`;
+    } else if (dietary !== "") {
+      recipeUrl += dietary === "true" ? `vegetarian` : `non-vegetarian`;
     }
-    else if(activeCategory !== ''){
-      recipeUrl += `category=${activeCategory}`
-    }
-    else if(dietary !== ""){
-      if(dietary === "true"){
-        recipeUrl += `vegetarian`;
+  
+    const fetchRecipesWithRetry = async (retry = false) => {
+      let token = localStorage.getItem('access_token'); // Get the potentially updated token
+      let headers = {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` }) // Include the Authorization header if token exists
+      };
+  
+      try {
+        const response = await fetch(recipeUrl, { headers });
+  
+        if (!response.ok) {
+          if (response.status === 401 && !retry) {
+            const refreshed = await refreshAccessToken();
+            if (refreshed) {
+              token = localStorage.getItem('access_token'); // Update the token variable with the new token
+              return await fetchRecipesWithRetry(true); // Retry with the updated token
+            } else {
+              throw new Error('Unable to refresh token');
+            }
+          } else {
+            throw new Error(`Request failed with status: ${response.status}`);
+          }
+        }
+  
+        const data = await response.json();
+        setRecipies(data); 
+        //console.log(data)
+      } catch (error) {
+        console.error('Failed to fetch recipes:', error);
+      } finally {
+        setLoading(false);
       }
-      else{
-        recipeUrl += `non-vegetarian`
-      }
-      
-    }
-    const fetchRecipe = await fetch(`${recipeUrl}`);
-    const fetchRecipeResponse = await fetchRecipe.json();   
-    setRecipies(fetchRecipeResponse);
-    setLoading(false);
-  }
+    };
+  
+    await fetchRecipesWithRetry();
+  };
   useEffect(() =>{
     recipeList();
   },[dietary,activeCategory])

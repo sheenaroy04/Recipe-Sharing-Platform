@@ -1,10 +1,25 @@
 import React from 'react'
 import { StarIcon } from "@heroicons/react/20/solid";
+import { useSelector } from 'react-redux';
+import { BookmarkIcon as OutlineBookMark } from "@heroicons/react/24/outline";
+import { BookmarkIcon as SolidBookMark } from "@heroicons/react/20/solid";
 
 const Procedure = ({recipe , procedure}) => {
+  const user = useSelector(state=>state.user);
   return (
     <>
+    {user &&
+            <div className='w-full flex flex-row items-end justify-end mb-6'>
+
+              {recipe.isBookMarked ?
+              <SolidBookMark className='h-7 w-7 text-yellow-500'/>:
+              <OutlineBookMark className='h-7 w-7 text-yellow-500'/>  
+            }
+              </div>
+      
+          }
     <div className='flex flex-row items-start justify-between'>
+    
             <p className='text-2xl md:text-4xl font-bold text-orange-600 my-2'>{recipe.title}</p>
             <div className='flex flex-col items-center'>
               <div className='flex flex-row items-center justify-center'>

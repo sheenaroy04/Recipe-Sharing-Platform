@@ -20,14 +20,21 @@ class CategoryView(APIView):
     
 class RecipeView(APIView):
     # permission_classes = [IsAuthenticated]
+    
     def get(self,request,recipe_id=None,categories = None , is_vegetarian=None , author=None):
+        user = request.user
         if recipe_id is not None:
             recipes = Recipe.objects.annotate(
                         average_score = Avg('Rating__score') or 0,
                         number_of_ratings = Count('Rating'),
+                        isBookMarked=Exists(
+                    Bookmark.objects.filter(user=user, recipe_id=OuterRef('pk'))) if user else None
                         ).order_by('-recipe_id').get(recipe_id=recipe_id)
+            
             if recipes.average_score is not None:
                 recipes.average_score = round(recipes.average_score, 1)
+                
+                
             serializer = RecipeSerializer(recipes)
             return Response(serializer.data)
         
@@ -75,7 +82,7 @@ class RecipeView(APIView):
             serializer = RecipeSerializer(recipes , many=True)
             return Response(serializer.data)
         
-        user = request.user
+        
         
         recipes = Recipe.objects.annotate(
             average_score = Avg('Rating__score') or 0,

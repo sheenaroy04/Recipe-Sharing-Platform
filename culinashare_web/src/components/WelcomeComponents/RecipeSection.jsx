@@ -8,11 +8,14 @@ import { useNavigate } from 'react-router-dom';
 import Loading from '../Loading';
 import nofood from '../../images/nofood.webp';
 import RecipeSkeletonLoader from './RecipeSkeletonLoader';
+import { BookmarkIcon as OutlineBookMark } from "@heroicons/react/24/outline";
+import { BookmarkIcon as SolidBookMark } from "@heroicons/react/20/solid";
+import { useSelector } from 'react-redux';
 
 
 const RecipeCard = ({currentItems , categories , users , recipeLoading}) =>{
   const[isLoading , setIsLoading] = useState(false);
-
+  const user = useSelector(state => state.user);
   // const[isRecipeVisible , setIsRecipeVisible] = useState(false);
 
   const navigate = useNavigate();
@@ -55,6 +58,13 @@ const RecipeCard = ({currentItems , categories , users , recipeLoading}) =>{
                   {/* transition-transform duration-500 
                                                       ${isRecipeVisible ? ' translate-y-0 opacity-100' : 'translate-y-40 opacity-0'} */}
                 <div className='w-full h-2/4 flex overflow-hidden'>
+                  {user &&<>
+                  {recipe.isBookMarked ?
+                  <SolidBookMark  className="h-5 w-5 z-10 text-yellow-400 absolute right-2 top-1" />
+                  :
+                  <OutlineBookMark  className="h-5 w-5 z-10 text-gray-500 absolute right-2 top-1" />
+
+                }</>}
                   <img src={`${imageAPIUrl}/${recipe.image}`} alt="" className='w-full h-full rounded-lg hover:scale-110 transition duration-300 ease-in-out' />
                 </div>
 

@@ -9,12 +9,14 @@ import sad from '../images/sad.svg';
 import Ingredients from '../components/RecipeViewComponent/Ingredients';
 import { ChevronLeftIcon , ChevronRightIcon } from "@heroicons/react/24/outline";
 import Loading from '../components/Loading';
+import { refreshAccessToken } from '../redux/refreshAccessToken';
+
 
 const RecipeView = () => {
   const {recipeId} = useParams();
   const user = useSelector(state => state.user);
   const backendUrl = process.env.REACT_APP_BASE_API_URL;
-  const [recipe , setRecipe] = useState({});
+  const [ recipe , setRecipe] = useState({});
   const[ingredients , setIngredients] = useState([]);
   const[procedure , setProcedure] = useState([])
   const[comments,setComments] = useState([]);
@@ -28,13 +30,52 @@ const RecipeView = () => {
 
   const[openPage , setOpenPage] = useState('');
 
-  const fetchRecipe = async() =>{
-    const response = await fetch(`${backendUrl}/food/recipies/recipe=${recipeId}`);
-    const responseData = await response.json();
-    setProcedure(responseData.procedure.split('.'))
-    setRecipe(responseData)
-    
-  }
+  const fetchRecipe = async () => {
+    const makeRequest = async (retry = false) => {
+        let headers = {
+            'Content-Type': 'application/json'
+        };
+
+        let token = localStorage.getItem('access_token');
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch(`${backendUrl}/food/recipies/recipe=${recipeId}`, { headers });
+
+        if (!response.ok) {
+            
+            if (response.status === 401 && !retry) {
+                const refreshed = await refreshAccessToken();
+                if (refreshed) {
+                    token = localStorage.getItem('access_token'); 
+                    return await makeRequest(true);
+                } else {
+                    
+                    throw new Error('Unable to refresh token and access the content.');
+                }
+            } else {
+              
+                throw new Error(`Request failed with status: ${response.status}`);
+            }
+        }
+
+        return response;
+    };
+
+    try {
+        const response = await makeRequest();
+        const responseData = await response.json();
+        console.log(responseData)
+        if (responseData.procedure) {
+            setProcedure(responseData.procedure.split('.'));
+        }
+        setRecipe(responseData);
+    } catch (error) {
+        console.error('Failed to fetch recipe:', error);
+        
+    }
+}
   const fetchIngredients = async() =>{
     const allIngredients = await fetch(`${backendUrl}/food/ingredients/recipe=${recipeId}`);
     const ingredientData = await allIngredients.json();
@@ -126,6 +167,7 @@ const RecipeView = () => {
     <div className='mt-16 p-4 md:p-8 min-h-[70vh] grid w-[100vw] lg:grid-cols-[65%_30%] grid-cols-1 bg-[#F0F8FF]  place-items-center gap-2 md:gap-8'>
       
       <div className='bg-white/80 h-full w-full  backdrop-blur-md shadow-md rounded-lg p-4 md:p-8 mt-32 md:mt-0 '>
+
         <Procedure recipe={recipe} procedure={procedure} />
       </div>
       {isIngredientsVisible ?
@@ -151,6 +193,7 @@ const RecipeView = () => {
     
     <div className='flex flex-col items-center justify-center w-[100vw] my-4'>
       <div className='flex flex-col w-1/2 items-center justify-center mb-2 gap-3'>
+      
         <p className='text-2xl md:text-4xl font-bold text-orange-600 text-center'>Rate this recipe</p>
         <div className='flex flex-row items-center justify-center'>
         {Array.from({length:5}).map((_,index)=>(
