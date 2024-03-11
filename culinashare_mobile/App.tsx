@@ -4,22 +4,33 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import React from 'react';
 import Navigation from './Navigation';
-
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
 SplashScreen.preventAutoHideAsync();
 
 
+const customFonts = {
+  Poppins : require('./assets/Poppins/Poppins-Regular.ttf')
+}
 
 
 const App : React.FC = () => {
 
-  useEffect(() =>{
-    const hideSplashScreen = async() =>{
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      await SplashScreen.hideAsync();
+  const[fontsLoaded] = useFonts(customFonts);
+
+  useEffect(() => {
+    async function prepare() {
+      if (fontsLoaded) {
+        await SplashScreen.hideAsync(); 
+      }
     }
 
-    hideSplashScreen();
-  },[])
+    prepare();
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <Navigation/>
