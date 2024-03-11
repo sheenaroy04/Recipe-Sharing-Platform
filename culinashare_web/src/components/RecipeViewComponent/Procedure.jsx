@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StarIcon } from "@heroicons/react/20/solid";
 import { useSelector } from 'react-redux';
 import { BookmarkIcon as OutlineBookMark } from "@heroicons/react/24/outline";
@@ -6,15 +6,35 @@ import { BookmarkIcon as SolidBookMark } from "@heroicons/react/20/solid";
 
 const Procedure = ({recipe , procedure}) => {
   const user = useSelector(state=>state.user);
+  const backendUrl = process.env.REACT_APP_BASE_API_URL;
+  const [isBookMarked , setIsBookMarked] = useState(recipe.isBookMarked);
+
+  const updateBookMark = async() =>{
+    const response =  await fetch(`${backendUrl}/food/bookmarks/`,{
+      method:'POST',
+      headers:{
+        'Content-Type' : 'application/json'
+      },
+      body:JSON.stringify({
+        user : user.userId,
+        recipe : recipe.recipe_id
+      })
+    });
+    
+    const responseData = await response.json();
+    console.log(responseData)
+  }
+
   return (
     <>
     {user &&
             <div className='w-full flex flex-row items-end justify-end mb-6'>
-
-              {recipe.isBookMarked ?
+              <button onClick={updateBookMark}>
+              {isBookMarked ?
               <SolidBookMark className='h-7 w-7 text-yellow-500'/>:
               <OutlineBookMark className='h-7 w-7 text-yellow-500'/>  
             }
+            </button>
               </div>
       
           }

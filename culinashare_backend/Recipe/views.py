@@ -195,6 +195,6 @@ class BookmarkView(APIView):
         else:
             serializer = BookmarkSerializer(bookmark)
             
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({'message':'Bookmark added'}, status=status.HTTP_201_CREATED)
         
     

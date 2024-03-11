@@ -167,7 +167,7 @@ const RecipeView = () => {
     <div className='mt-16 p-4 md:p-8 min-h-[70vh] grid w-[100vw] lg:grid-cols-[65%_30%] grid-cols-1 bg-[#F0F8FF]  place-items-center gap-2 md:gap-8'>
       
       <div className='bg-white/80 h-full w-full  backdrop-blur-md shadow-md rounded-lg p-4 md:p-8 mt-32 md:mt-0 '>
-
+        
         <Procedure recipe={recipe} procedure={procedure} />
       </div>
       {isIngredientsVisible ?
