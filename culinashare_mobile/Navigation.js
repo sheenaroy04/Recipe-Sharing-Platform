@@ -8,6 +8,7 @@ import { AntDesign , Entypo ,FontAwesome5} from '@expo/vector-icons';
 
 import NewPost from "./pages/NewPost";
 import Profile from "./pages/Profile";
+import { Text, View } from "react-native";
 
 
 const Stack = createStackNavigator();
@@ -61,18 +62,26 @@ const Navigation  = () =>{
     return(
         <NavigationContainer>
             {!user ? 
-            <Stack.Navigator initialRouteName="Login" screenOptions={{
-                headerTitleStyle:{
-                    fontFamily:'Poppins'
-                }
-            }} >
+            <Stack.Navigator initialRouteName="Login" >
                 
                 <Stack.Screen name="Login" component={Login} options={{headerShown:false}} />
                 <Stack.Screen name="Register" component={Register} options={{headerShown:false}} />
             </Stack.Navigator>
                 :
-            <Stack.Navigator screenOptions={{headerShown:false}}>
-                <Stack.Screen name="TabBar" component={TabBar} options={{headerShown:false}} />
+            <Stack.Navigator>
+                <Stack.Screen name="TabBar" component={TabBar} 
+                options={{
+                    header: ({navigation , scene}) =>(
+                        <View style={{ height: 100, 
+                                        display:'flex',
+                                        flexDirection: 'row', 
+                                        alignItems: 'center', 
+                                        justifyContent: 'center', 
+                                        backgroundColor: 'tomato' }}>
+                             <Text>Hello</Text>               
+                        </View>
+                    )
+                }} />
             </Stack.Navigator>
             }
         </NavigationContainer>
