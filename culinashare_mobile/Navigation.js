@@ -4,7 +4,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./pages/Home";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign , Entypo ,FontAwesome5} from '@expo/vector-icons';
+
 import NewPost from "./pages/NewPost";
 import Profile from "./pages/Profile";
 
@@ -15,19 +16,36 @@ const Tab = createBottomTabNavigator();
 const TabBar = () =>{
     return(
       
-            <Tab.Navigator>
+            <Tab.Navigator  screenOptions={{
+                tabBarShowLabel:false,
+                tabBarStyle:{
+                    backgroundColor:'#1c2b49',
+                   
+                },
+            
+            }}>
                 <Tab.Screen name="Home" component={Home}  options={{headerShown:false,
-                        tabBarIcon:() => (<AntDesign name="home" size={24} color="black" />)}} />
+                        tabBarIcon:({focused}) => (
+                            focused?
+                            <Entypo name="home" size={30} color="#cf4d0e"  />:
+                        <AntDesign name="home" size={30} color="white" />
+                        
+                        )}} />
                 <Tab.Screen name="Post" component={NewPost} options={{
                     headerShown:false,
-                    tabBarIcon:() =>(
-                        <AntDesign name="pluscircleo" size={24} color="black" />
+                    tabBarIcon:({focused}) => (
+                        focused?
+                        <AntDesign name="pluscircle" size={30} color="#cf4d0e" />:
+                        <AntDesign name="pluscircleo" size={30} color="white" />
+                        
                     )
                 }}/>
                 <Tab.Screen name="Profile" component={Profile} options={{
                     headerShown:false,
-                    tabBarIcon:()=>(
-                        <AntDesign name="user" size={24} color="black" />
+                    tabBarIcon:({focused})=>(
+                        focused?
+                        <FontAwesome5 name="user-alt" size={28} color="#cf4d0e" />:
+                        <FontAwesome5 name="user" size={28} color="white" />
                     )
                 }}/>
             </Tab.Navigator>
@@ -39,11 +57,15 @@ const TabBar = () =>{
 
 
 const Navigation  = () =>{
-    const user = false;
+    const user = true;
     return(
         <NavigationContainer>
             {!user ? 
-            <Stack.Navigator initialRouteName="Login">
+            <Stack.Navigator initialRouteName="Login" screenOptions={{
+                headerTitleStyle:{
+                    fontFamily:'Poppins'
+                }
+            }} >
                 
                 <Stack.Screen name="Login" component={Login} options={{headerShown:false}} />
                 <Stack.Screen name="Register" component={Register} options={{headerShown:false}} />

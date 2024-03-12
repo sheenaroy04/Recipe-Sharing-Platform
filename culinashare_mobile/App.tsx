@@ -10,7 +10,9 @@ SplashScreen.preventAutoHideAsync();
 
 
 const customFonts = {
-  Poppins : require('./assets/Poppins/Poppins-Regular.ttf')
+  Poppins : require('./assets/Poppins/Poppins-Regular.ttf'),
+  'Poppins-Thin' : require('./assets/Poppins/Poppins-Thin.ttf'),
+  Lato : require('./assets/Lato/Lato-Regular.ttf')
 }
 
 
