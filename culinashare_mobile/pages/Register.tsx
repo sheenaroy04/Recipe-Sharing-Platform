@@ -6,6 +6,7 @@ import logo from '../assets/culinashare_.png';
 
 import { RootStackParamList } from '../navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
+import PoppinsText from '../components/Custom/PoppinsText';
 
 type RegisterScreenNavProp = StackNavigationProp<RootStackParamList , 'Register'>;
 
@@ -22,10 +23,10 @@ const Register : React.FC<Props> = ({navigation}) => {
       <View tw='w-[100vw] flex-1 items-center justify-around h-[100vh] py-16'>
         <View tw='w-full flex flex-col items-center  justify-center' >
           <Image source={logo} tw='w-2/3 h-1/2'  style={{resizeMode : 'contain'}} />
-          <Text tw='text-white text-center flex-1 text-xl' style={{fontFamily:'Poppins'}}>
+          <PoppinsText tw='text-white text-center flex-1 text-xl'>
               Where every bite unfolds a story.
               In every dish, a journey discovered.
-          </Text>
+          </PoppinsText>
         </View>
         
         

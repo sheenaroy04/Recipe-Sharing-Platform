@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./pages/Home";
-import { AntDesign , Entypo ,FontAwesome5} from '@expo/vector-icons';
+import { AntDesign , Entypo ,FontAwesome , Ionicons} from '@expo/vector-icons';
 
 import NewPost from "./pages/NewPost";
 import Profile from "./pages/Profile";
@@ -41,12 +41,21 @@ const TabBar = () =>{
                         
                     )
                 }}/>
+                <Tab.Screen name="Notification" component={NewPost} options={{
+                    headerShown:false,
+                    tabBarIcon:({focused}) => (
+                        focused?
+                        <Ionicons name="notifications-sharp" size={30} color="#cf4d0e" />:
+                        <Ionicons name="notifications-outline" size={30} color="white" />
+                        
+                    )
+                }}/>
                 <Tab.Screen name="Profile" component={Profile} options={{
                     headerShown:false,
                     tabBarIcon:({focused})=>(
                         focused?
-                        <FontAwesome5 name="user-alt" size={28} color="#cf4d0e" />:
-                        <FontAwesome5 name="user" size={28} color="white" />
+                        <FontAwesome name="user-circle-o" size={30} color="#cf4d0e" />:
+                        <FontAwesome name="user-circle" size={30} color="white" />
                     )
                 }}/>
             </Tab.Navigator>
@@ -68,20 +77,8 @@ const Navigation  = () =>{
                 <Stack.Screen name="Register" component={Register} options={{headerShown:false}} />
             </Stack.Navigator>
                 :
-            <Stack.Navigator>
-                <Stack.Screen name="TabBar" component={TabBar} 
-                options={{
-                    header: ({navigation , scene}) =>(
-                        <View style={{ height: 100, 
-                                        display:'flex',
-                                        flexDirection: 'row', 
-                                        alignItems: 'center', 
-                                        justifyContent: 'center', 
-                                        backgroundColor: 'tomato' }}>
-                             <Text>Hello</Text>               
-                        </View>
-                    )
-                }} />
+            <Stack.Navigator screenOptions={{headerShown:false}}>
+                <Stack.Screen name="TabBar" component={TabBar}  />
             </Stack.Navigator>
             }
         </NavigationContainer>
