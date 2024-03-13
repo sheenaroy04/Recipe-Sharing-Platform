@@ -40,7 +40,7 @@ const Procedure = ({recipe , procedure}) => {
           }
     <div className='flex flex-row items-start justify-between'>
     
-            <p className='text-2xl md:text-4xl font-bold text-orange-600 my-2'>{recipe.title}</p>
+            <p className='text-2xl md:text-4xl font-bold text-orange-600 my-2 underline'>{recipe.title}</p>
             <div className='flex flex-col items-center'>
               <div className='flex flex-row items-center justify-center'>
                 {Array.from({length : 5}).map((_,index)=>(
