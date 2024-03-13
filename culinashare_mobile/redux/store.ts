@@ -1,6 +1,7 @@
 import {createStore , Store} from 'redux';
 import reducers from './reducers';
 import { jwtDecode } from 'jwt-decode';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -13,8 +14,14 @@ interface UserToken{
     username : string;
 }
 
-const getUserFromLocalStorage = () : State =>{
-    const token : string | null = localStorage.getItem('access_token');
+interface UserData {
+    userId: string;
+    userName: string;
+  }
+
+const getUserFromLocalStorage =async () : Promise<{user:UserData} | undefined> =>{
+    
+    const token : string | null = await AsyncStorage.getItem('access_token');
     if(token){
         try {
             const userToken : UserToken = jwtDecode<UserToken>(token);
@@ -33,6 +40,6 @@ const getUserFromLocalStorage = () : State =>{
     return { user: null };
 }
 
-const store : Store<State> = createStore(reducers,getUserFromLocalStorage());
+const store : Store<State> =  createStore(reducers,getUserFromLocalStorage());
 
 export default store;

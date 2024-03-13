@@ -5,7 +5,7 @@ import Register from "./pages/Register";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./pages/Home";
 import { AntDesign , Entypo ,FontAwesome , Ionicons} from '@expo/vector-icons';
-
+import { useSelector } from "react-redux";
 import NewPost from "./pages/NewPost";
 import Profile from "./pages/Profile";
 import { Text, View } from "react-native";
@@ -67,7 +67,7 @@ const TabBar = () =>{
 
 
 const Navigation  = () =>{
-    const user = true;
+    const user = useSelector(state => state.user);
     return(
         <NavigationContainer>
             {!user ? 

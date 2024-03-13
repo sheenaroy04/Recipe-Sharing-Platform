@@ -6,6 +6,8 @@ import React from 'react';
 import Navigation from './Navigation';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
+import store from './redux/store';
+import { Provider } from 'react-redux';
 SplashScreen.preventAutoHideAsync();
 
 
@@ -35,7 +37,10 @@ const App : React.FC = () => {
   }
 
   return (
-    <Navigation/>
+    <Provider store={store}>
+      <Navigation/>
+    </Provider>
+    
   );
 }
 
