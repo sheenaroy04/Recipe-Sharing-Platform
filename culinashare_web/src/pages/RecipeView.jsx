@@ -10,6 +10,7 @@ import Ingredients from '../components/RecipeViewComponent/Ingredients';
 import { ChevronLeftIcon , ChevronRightIcon } from "@heroicons/react/24/outline";
 import Loading from '../components/Loading';
 import { refreshAccessToken } from '../redux/refreshAccessToken';
+import BottomPopup from '../components/BottomPopup';
 
 
 const RecipeView = () => {
@@ -29,6 +30,7 @@ const RecipeView = () => {
   const[message , setMessage] = useState('');
 
   const[openPage , setOpenPage] = useState('');
+
 
   const fetchRecipe = async () => {
     const makeRequest = async (retry = false) => {

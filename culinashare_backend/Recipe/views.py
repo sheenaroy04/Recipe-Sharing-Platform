@@ -191,7 +191,7 @@ class BookmarkView(APIView):
         bookmark, created = Bookmark.objects.get_or_create(user=user, recipe=recipe)
         if not created:
             bookmark.delete()
-            return Response({'message': 'Bookmark removed'}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'message': 'Bookmark removed'})
         else:
             serializer = BookmarkSerializer(bookmark)
             

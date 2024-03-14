@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StarIcon } from "@heroicons/react/20/solid";
 import { useSelector } from 'react-redux';
 import { BookmarkIcon as OutlineBookMark } from "@heroicons/react/24/outline";
 import { BookmarkIcon as SolidBookMark } from "@heroicons/react/20/solid";
+import BottomPopup from '../BottomPopup';
 
 const Procedure = ({recipe , procedure}) => {
   const user = useSelector(state=>state.user);
   const backendUrl = process.env.REACT_APP_BASE_API_URL;
   const [isBookMarked , setIsBookMarked] = useState(recipe.isBookMarked);
+  const[showPopup , setShowPopup] = useState(false);
+  const[bookmarkMsg , setBookmarkMsg] = useState('');
 
   const updateBookMark = async() =>{
     const response =  await fetch(`${backendUrl}/food/bookmarks/`,{
@@ -20,13 +23,36 @@ const Procedure = ({recipe , procedure}) => {
         recipe : recipe.recipe_id
       })
     });
-    
+    // console.log(response);
     const responseData = await response.json();
-    console.log(responseData)
+    const msg = responseData.message;
+    if(msg === 'Bookmark added'){
+      setIsBookMarked(true);
+      setShowPopup(true);
+      setBookmarkMsg(msg);
+      setTimeout(()=>{
+        setShowPopup(false);
+      },4000)
+    }
+    else if(msg === 'Bookmark removed'){
+      setIsBookMarked(false);
+      setShowPopup(true);
+      setBookmarkMsg(msg);
+      setTimeout(()=>{
+        setShowPopup(false);
+      },4000)
+    }
+    //console.log(responseData)
   }
+
+  useEffect(() => {
+    setIsBookMarked(recipe.isBookMarked);
+  }, [recipe]);
+
 
   return (
     <>
+    <BottomPopup message={bookmarkMsg} showPopup={showPopup}/>
     {user &&
             <div className='w-full flex flex-row items-end justify-end mb-6'>
               <button onClick={updateBookMark}>
@@ -38,6 +64,7 @@ const Procedure = ({recipe , procedure}) => {
               </div>
       
           }
+          
     <div className='flex flex-row items-start justify-between'>
     
             <p className='text-2xl md:text-4xl font-bold text-orange-600 my-2 underline'>{recipe.title}</p>

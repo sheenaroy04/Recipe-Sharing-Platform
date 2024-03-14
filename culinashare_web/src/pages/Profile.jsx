@@ -156,6 +156,7 @@ const Profile = () => {
               </div>
     )
   }
+  
 
   return (
     <div className='w-full min-h-[100vh] flex items-center justify-center '>
@@ -183,7 +184,7 @@ const Profile = () => {
               </div>
               <div>
                 <p>Posts . {posted.length}</p>
-                <p className='flex flex-row items-center gap-2'>Bookmarks . 0 <BookmarkIcon className="h-5 w-4 text-orange-500" /></p>
+                <p className='flex flex-row items-center gap-2'>Bookmarks . {bookmark.length} <BookmarkIcon className="h-5 w-4 text-orange-500" /></p>
               </div>
               
             </div>
