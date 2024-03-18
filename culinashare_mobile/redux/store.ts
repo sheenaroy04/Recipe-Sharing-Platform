@@ -34,10 +34,10 @@ const getUserFromLocalStorage =async () : Promise<{user:UserData} | undefined> =
             }
         } catch (error) {
             console.error('Error decoding token:', error);
-            return { user: null };
+            return ;
         }
     }
-    return { user: null };
+    return ;
 }
 
 const store : Store<State> =  createStore(reducers,getUserFromLocalStorage());

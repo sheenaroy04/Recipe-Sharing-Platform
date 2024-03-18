@@ -5,6 +5,7 @@ import logo from '../assets/culinashare_.png';
 import { RootStackParamList } from '../navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import PoppinsText from '../components/Custom/PoppinsText';
+import Constants from 'expo-constants';
 
 type LoginScreenNavProp = StackNavigationProp<RootStackParamList , 'Login'>;
 
@@ -12,9 +13,42 @@ type Props = {
   navigation : LoginScreenNavProp
 }
 
+interface LoginCredentials{
+  username : string,
+  password : string
+}
+
 const Login : React.FC<Props> = ({navigation}) => {
-  const[username , setUsername] = useState<string>('');
-  const[password , setPassword] = useState<string>('');
+  const[username , setUsername] = useState<string>("");
+  const[password , setPassword] = useState<string>("");
+
+  const backendUrl = 'https://88a5-115-242-182-162.ngrok-free.app';
+
+  const login = async () => {
+    const data = {
+      "username": "nandhakumar",
+      "password": "nandhakumar",
+    }
+    console.log(data)
+    try {
+      const loginCredentials = await fetch(`${backendUrl}/api/v1/customers/users/login/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      // console.log('Status:', loginCredentials.status); 
+      const response = await loginCredentials.json();
+      console.log(response);
+      if(loginCredentials.status === 200){
+        
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
 
   return (
     <Frame>
@@ -33,7 +67,7 @@ const Login : React.FC<Props> = ({navigation}) => {
           <TextInput value={username} onChangeText={(e)=>setUsername(e)} tw='bg-white/80  w-[90%] backdrop-filter-md shadow-md p-2 rounded-md text-l ' placeholder='Username' />
           <TextInput value={password} onChangeText={(e)=>setPassword(e)}  secureTextEntry={true} tw='bg-white/80  w-[90%] backdrop-filter-md shadow-md p-2 rounded-md text-l ' placeholder='Password' />
 
-          <TouchableOpacity tw='w-[90%] p-2   flex items-center justify-center bg-slate-700'>
+          <TouchableOpacity onPress={login} tw='w-[90%] p-2   flex items-center justify-center bg-slate-700'>
             <Text tw='text-white text-xl font-semibold'>Login</Text>
           </TouchableOpacity>
 
