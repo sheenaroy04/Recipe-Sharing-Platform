@@ -17,6 +17,7 @@ const initialState : State = {
 const reducers = (state:State = initialState , action : Action) : State =>{
     switch(action.type){
         case 'SET_USER':
+            console.log('SET')
             return{
                 ...state,
                 user : action.payload

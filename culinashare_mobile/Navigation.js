@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import NewPost from "./pages/NewPost";
 import Profile from "./pages/Profile";
 import { Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const Stack = createStackNavigator();
@@ -68,6 +70,13 @@ const TabBar = () =>{
 
 const Navigation  = () =>{
     const user = useSelector(state => state.user);
+    const[exist,setExist] = useState(false);
+    // useEffect(async()=>{
+    //     const token =await AsyncStorage.getItem('access_token');
+    //     if(token){
+    //         console.log(token)
+    //     }
+    // },[])
     return(
         <NavigationContainer>
             {!user ? 

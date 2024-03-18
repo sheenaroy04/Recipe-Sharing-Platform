@@ -6,7 +6,12 @@ import { RootStackParamList } from '../navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import PoppinsText from '../components/Custom/PoppinsText';
 import Constants from 'expo-constants';
-
+import  {jwtDecode } from 'jwt-decode';
+import {decode} from 'base-64';
+import { useDispatch } from 'react-redux';
+import {setUser} from '../redux/actions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+ 
 type LoginScreenNavProp = StackNavigationProp<RootStackParamList , 'Login'>;
 
 type Props = {
@@ -18,30 +23,50 @@ interface LoginCredentials{
   password : string
 }
 
+interface JwtPayload{
+  userId : string,
+  userName : string
+}
+
 const Login : React.FC<Props> = ({navigation}) => {
+  const dispatch = useDispatch();
   const[username , setUsername] = useState<string>("");
   const[password , setPassword] = useState<string>("");
 
-  const backendUrl = 'https://88a5-115-242-182-162.ngrok-free.app';
+  const backendUrl = 'https://2bf2-2409-40f4-2d-de95-49b5-cfb8-6b08-dc8e.ngrok-free.app';
 
   const login = async () => {
-    const data = {
-      "username": "nandhakumar",
-      "password": "nandhakumar",
+    const userData = {
+      username: username,
+      password: password,
     }
-    console.log(data)
+    //console.log(userData)
     try {
       const loginCredentials = await fetch(`${backendUrl}/api/v1/customers/users/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(userData),
       })
       // console.log('Status:', loginCredentials.status); 
       const response = await loginCredentials.json();
-      console.log(response);
+      //console.log(response);
       if(loginCredentials.status === 200){
+        const decodedPayload = decode(response.access_token.split('.')[1]);
+        console.log(decodedPayload)
+        if(decodedPayload){
+          const user : JwtPayload = {
+            userId : decodedPayload.user_id,
+            userName : decodedPayload.username
+          }
+          await AsyncStorage.setItem('access_token' , response.access_token);
+          await AsyncStorage.setItem('refresh_token' ,response.refresh_token );
+          dispatch(setUser(user));
+        }
+        else{
+          console.error('Error while decoding')
+        }
         
       }
     } catch (error) {
