@@ -6,7 +6,7 @@ interface Action {
     payload :any
 }
 
-interface State{
+export interface State{
     user : null | { userId : string ; userName : string};
 }
 
@@ -17,7 +17,6 @@ const initialState : State = {
 const reducers = (state:State = initialState , action : Action) : State =>{
     switch(action.type){
         case 'SET_USER':
-            console.log('SET')
             return{
                 ...state,
                 user : action.payload

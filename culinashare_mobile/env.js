@@ -1,0 +1,1 @@
+export const REACT_APP_BASE_API_URL = 'https://49db-115-242-182-162.ngrok-free.app/api/v1'

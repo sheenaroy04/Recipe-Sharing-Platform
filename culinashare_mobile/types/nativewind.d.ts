@@ -1,17 +1,31 @@
-// // Example of declaring types for 'tw' prop on NativeWind components
-// declare module 'react-native' {
-//     import {ComponentProps} from 'react';
-//     import {TextStyle, ViewStyle} from 'react-native';
-  
-//     // Extend existing props with 'tw' for View, Text, etc.
-//     interface ViewProps extends ComponentProps<View> {
-//       tw?: string | TemplateStringsArray;
-//     }
-  
-//     interface TextProps extends ComponentProps<Text> {
-//       tw?: string | TemplateStringsArray;
-//     }
-  
-//     // Add other component props as needed
-//   }
-  
+// react-native-augmentations.d.ts
+import 'react-native';
+
+declare module 'react-native' {
+  import { ViewProps as OriginalViewProps,
+             TextProps as OriginalTextProps, 
+             ScrollViewProps as OriginalScrollViewProps, 
+             TextInputProps as OriginalTextInputProps,
+            TouchableOpacityProps as OriginalTouchableOpacityProps } from 'react-native';
+
+  export interface ViewProps extends OriginalViewProps {
+    tw?: string;
+  }
+
+  export interface TextProps extends OriginalTextProps {
+    tw?: string;
+  }
+
+  export interface ScrollViewProps extends OriginalScrollViewProps {
+    tw?: string;
+  }
+
+  export interface TextInputProps extends OriginalTextInputProps {
+    tw?: string;
+  }
+  export interface TouchableOpacityProps extends OriginalTouchableOpacityProps{
+    tw? : string;
+  }
+
+  // Extend other component props as needed
+}

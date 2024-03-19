@@ -11,6 +11,7 @@ import {decode} from 'base-64';
 import { useDispatch } from 'react-redux';
 import {setUser} from '../redux/actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { REACT_APP_BASE_API_URL } from '../env';
  
 type LoginScreenNavProp = StackNavigationProp<RootStackParamList , 'Login'>;
 
@@ -33,7 +34,6 @@ const Login : React.FC<Props> = ({navigation}) => {
   const[username , setUsername] = useState<string>("");
   const[password , setPassword] = useState<string>("");
 
-  const backendUrl = 'https://2bf2-2409-40f4-2d-de95-49b5-cfb8-6b08-dc8e.ngrok-free.app';
 
   const login = async () => {
     const userData = {
@@ -42,7 +42,7 @@ const Login : React.FC<Props> = ({navigation}) => {
     }
     //console.log(userData)
     try {
-      const loginCredentials = await fetch(`${backendUrl}/api/v1/customers/users/login/`, {
+      const loginCredentials = await fetch(`${REACT_APP_BASE_API_URL}/customers/users/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
