@@ -1,5 +1,5 @@
-import { Button, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { Button, SafeAreaView, ScrollView, Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View ,Animated} from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import SearchBar from '../components/SearchBar'
 import PoppinsText from '../components/Custom/PoppinsText';
@@ -10,7 +10,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RecipeCard from '../components/RecipeCard';
 import {RecipeType} from '../types/type'
 import { LinearGradient } from 'expo-linear-gradient';
-
+const screenHeight = Dimensions.get('window').height;
+const heightPercent = 25;
 interface Category {
   id: number;
   name: string;
@@ -24,6 +25,10 @@ const Home  :React.FC = () => {
   const[categories , setCategories] = useState<Category[]>([]);
   const[activeCategory , setActiveCategory] = useState<number>(0);
   const[recipes , setRecipes] = useState<RecipeType[]>([]);
+  const[isScrollDown , setIsScrollDown] = useState<boolean>(false);
+  const[scrollPos , setScrollPos] = useState<number>(0);
+
+  const height = useRef(new Animated.Value(20)).current;
 
   const fetchCategories = async() =>{
     try {
@@ -58,25 +63,47 @@ const Home  :React.FC = () => {
     }
   }
 
+  const handleScrollY = (event:any ) =>{
+    
+    const currentPos = event.nativeEvent.contentOffset.y;
+    //console.log(currentPos)
+    const scrollDown = currentPos > screenHeight * (heightPercent / 100) ;
+    setIsScrollDown(scrollDown);
+    setScrollPos(currentPos);
+
+    
+    
+  }
+
   useEffect(()=>{
     fetchCategories();
     fetchRecipes();
   },[])
 
+  useEffect(()=>{
+    Animated.timing(height, {
+      toValue: isScrollDown ? 0 : 50, // Change 100 to your component's visible height
+      duration: 500,
+      useNativeDriver: false, // height does not support useNativeDriver
+    }).start();
+  },[isScrollDown , height])
+
   return (
     <SafeAreaView tw='flex-1 items-center px-6'>
-      <LinearGradient colors={['#E65100','#EF6C00']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 0, y: 1 }}
-      tw='flex flex-col w-[100vw] px-4 bg-orange-600 rounded-b-3xl'>
-      <SearchBar/>
-
-      <PoppinsText tw='w-full text-2xl text-white font-semibold'>
+      <LinearGradient colors={['#E65100','#EF6C00']} 
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        tw='flex flex-col w-[100vw] px-4 bg-orange-600 rounded-b-3xl'>
+        <SearchBar/>
+      <Animated.View style={{height}}>
+      <PoppinsText tw='w-full text-2xl text-white font-semibold mb-2'>
         Hello {user.userName},
       </PoppinsText>
-
-      <View tw="flex w-full">
-      <ScrollView horizontal={true} tw='flex flex-row my-4' 
+      </Animated.View>
+    </LinearGradient>
+      
+    <View tw="flex w-full">
+      <ScrollView horizontal={true} tw='flex flex-row my-4'  
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{}}>
         {categories.map((category,index)=>(
@@ -87,10 +114,10 @@ const Home  :React.FC = () => {
       
       </ScrollView>
       </View>
-    </LinearGradient>
-      
 
-      <ScrollView tw='flex-1  w-full my-4' showsVerticalScrollIndicator={false} contentContainerStyle={{ alignItems:'center'}}>
+      <ScrollView tw='flex-1  w-full my-4' showsVerticalScrollIndicator={false} 
+                contentContainerStyle={{ alignItems:'center'}}
+                onScroll={handleScrollY} scrollEventThrottle={16}>
         {recipes.length>0 && recipes.map((recipe , index) =>(
           <RecipeCard key={index} recipe={recipe}/>
         ))}

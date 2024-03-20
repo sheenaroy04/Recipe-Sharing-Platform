@@ -4,7 +4,7 @@ import { TextInput } from 'react-native-gesture-handler'
 
 const SearchBar = () => {
   return (
-    <View tw='w-full bg-[#F0F8FF] rounded-full  my-10 flex flex-row items-center py-2 px-4'
+    <View tw='w-full  bg-[#F0F8FF] rounded-full  my-10 flex flex-row items-center py-2 px-4'
         style={{
             
             shadowColor:'#000',

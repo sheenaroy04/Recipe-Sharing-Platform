@@ -9,6 +9,7 @@ export interface RecipeType{
     servings: number,
     date_published: string,
     image: string,
-    author: string,
+    isBookMarked:boolean,
+    author: number,
     categories: number
   }
