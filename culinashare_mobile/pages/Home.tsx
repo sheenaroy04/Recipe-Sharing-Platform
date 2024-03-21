@@ -27,6 +27,7 @@ const Home  :React.FC = () => {
   const[recipes , setRecipes] = useState<RecipeType[]>([]);
   const[isScrollDown , setIsScrollDown] = useState<boolean>(false);
   const[scrollPos , setScrollPos] = useState<number>(0);
+  const[isVeg , setIsVeg] = useState<any>(null);
 
   const height = useRef(new Animated.Value(20)).current;
 
@@ -46,9 +47,21 @@ const Home  :React.FC = () => {
   }
 
   const fetchRecipes = async() =>{
-    const token = await AsyncStorage.getItem('access_token')
+    const token = await AsyncStorage.getItem('access_token');
+    let url = `${REACT_APP_BASE_API_URL}/food/recipies/`;
+    if(activeCategory !== 0 && isVeg !== null){
+      url += `${activeCategory}/`;
+      url += isVeg ?  'vegetarian' : 'non-vegetarian'
+    }
+    else if(activeCategory !== 0){
+      url +=  `category=${activeCategory}`;
+      console.log('Changed')
+    }
+    else if(isVeg !== null){
+      url += isVeg ?  'vegetarian' : 'non-vegetarian'
+    }
     try {
-      const recipeList = await fetch(`${REACT_APP_BASE_API_URL}/food/recipies/`,{
+      const recipeList = await fetch(`${url}`,{
         method:'GET',
         headers:{
           "Authorization" : `Bearer ${token}`,
@@ -56,7 +69,7 @@ const Home  :React.FC = () => {
         }
       });
       const responseData =await recipeList.json();
-      console.log(responseData);
+      //console.log(responseData);
       setRecipes(responseData);
     } catch (error) {
       
@@ -78,7 +91,7 @@ const Home  :React.FC = () => {
   useEffect(()=>{
     fetchCategories();
     fetchRecipes();
-  },[])
+  },[activeCategory , isVeg])
 
   useEffect(()=>{
     Animated.timing(height, {
@@ -102,7 +115,7 @@ const Home  :React.FC = () => {
       </Animated.View>
     </LinearGradient>
       
-    <View tw="flex w-full">
+    <View tw="flex w-full flex-row items-center">
       <ScrollView horizontal={true} tw='flex flex-row my-4'  
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{}}>
@@ -113,8 +126,19 @@ const Home  :React.FC = () => {
         ))}
       
       </ScrollView>
+      
       </View>
-
+      <View tw='w-[90%] flex flex-row items-center justify-end'>
+        <TouchableOpacity tw='mx-1' onPress={()=>setIsVeg(null)}>
+          <Text>All</Text>
+        </TouchableOpacity>  
+        <TouchableOpacity tw='mx-1' onPress={()=>setIsVeg(true)}>
+          <Text>Veg</Text>
+        </TouchableOpacity>
+        <TouchableOpacity tw='mx-1' onPress={()=>setIsVeg(false)}>
+          <Text>Non-Veg</Text>
+        </TouchableOpacity>
+      </View>
       <ScrollView tw='flex-1  w-full my-4' showsVerticalScrollIndicator={false} 
                 contentContainerStyle={{ alignItems:'center'}}
                 onScroll={handleScrollY} scrollEventThrottle={16}>
