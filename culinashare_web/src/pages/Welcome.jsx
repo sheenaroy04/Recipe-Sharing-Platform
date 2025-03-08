@@ -196,12 +196,12 @@ const Welcome = () => {
                text-l md:text-lg text-[#F0F8FF]  shadow-md shadow-black'>
                 Begin Your Culinary Journey
               </button>
-              <button className='px-6  font-poppins py-2 bg-slate-600 transition duration-200 hover:bg-slate-500 
+              {/* <button className='px-6  font-poppins py-2 bg-slate-600 transition duration-200 hover:bg-slate-500 
                                 rounded-sm hover:scale-105 text-l md:text-lg text-white  shadow-md shadow-black
                                 flex flex-row gap-1 items-center justify-center    '>
                Get the App
                <DevicePhoneMobileIcon className="h-6 w-6 text-white" />
-              </button>
+              </button> */}
             </div>
             
             
